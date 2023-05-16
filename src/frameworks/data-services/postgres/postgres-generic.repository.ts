@@ -1,4 +1,4 @@
-import { IGenericRepository } from 'src/core/abstracts';
+import { IGenericRepository } from '../../../core/abstracts';
 import { IPostgresGenericModel } from './model/postgres-generic.model';
 
 export class PostgresGenericRepository<T> implements IGenericRepository<T> {

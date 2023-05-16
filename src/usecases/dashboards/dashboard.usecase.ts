@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { IAuditServices, IDataServices } from 'src/core/abstracts';
-import { Dashboard } from 'src/core/entities';
+import { IAuditServices, IDataServices } from '../../core/abstracts';
+import { Dashboard } from '../../core/entities';
 
 @Injectable()
 export class DashboardUseCase {

@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import {
   CreateDashboardDto,
   UpdateDashboardDto,
-} from 'src/core/dtos/dashboard.dto';
-import { Dashboard } from 'src/core/entities';
+} from '../../core/dtos/dashboard.dto';
+import { Dashboard } from '../../core/entities';
 
 // We are using the dashboardFactoryService to convert our DTO to a business Dashboard object
 @Injectable()

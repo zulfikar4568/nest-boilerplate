@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PostgresDashboardModel } from './model';
-import { IDataServices } from 'src/core/abstracts';
+import { IDataServices } from '../../../core/abstracts';
 import { PostgresDataService } from './postgres-data.service';
 
 @Module({

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuditDashboardModule } from 'src/frameworks/audit-services';
+import { AuditDashboardModule } from '../../frameworks/audit-services';
 
 @Module({
   imports: [AuditDashboardModule],

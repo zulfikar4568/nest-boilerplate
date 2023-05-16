@@ -1,5 +1,5 @@
 import { IAuditServices } from 'src/core/abstracts';
-import { Dashboard } from 'src/core/entities';
+import { Dashboard } from '../../core/entities';
 
 export class AuditDashboardService implements IAuditServices<Dashboard> {
   addHistoryAudit(data: Dashboard): Promise<boolean> {
