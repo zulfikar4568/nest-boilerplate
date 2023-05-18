@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { CreateDashboardResponseDto } from 'src/core/dtos/create-dashboard.dto';
+import { CreateDashboardResponseDto } from '../core/dtos/create-dashboard.dto';
 import {
   CreateDashboardDto,
   UpdateDashboardDto,
-} from 'src/core/dtos/dashboard.dto';
-import { DashboardUseCase } from 'src/usecases/dashboards';
-import { DashboardFactoryService } from 'src/usecases/dashboards/dashboard-factory.service';
+} from '../core/dtos/dashboard.dto';
+import { DashboardUseCase } from '../usecases/dashboards';
+import { DashboardFactoryService } from '../usecases/dashboards/dashboard-factory.service';
 
 @Controller('api/dashboard')
 export class DashboardController {
@@ -45,7 +45,7 @@ export class DashboardController {
   }
 
   @Put(':id')
-  updateBook(
+  updateDashboard(
     @Param('id') dashboardId: string,
     @Body() updateDashboardDto: UpdateDashboardDto,
   ) {
