@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, Length } from 'class-validator';
-import { Dashboard } from '../entities';
 import { PartialType } from '@nestjs/mapped-types';
+import { Dashboard } from '../entities';
 
 export class CreateDashboardDto extends Dashboard {
   @IsString()

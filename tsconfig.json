@@ -1,21 +1,38 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
     "target": "es2017",
-    "sourceMap": true,
-    "outDir": "./dist",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "commonjs",
+    "moduleResolution": "Node",
     "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
+    "paths": {
+      "@/*": ["./src/*"],
+    },
+    "strictPropertyInitialization": false,
+    "resolveJsonModule": true,
+    "allowJs": false,
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "./.build",
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "strict": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false,
+    "incremental": true,
+  },
+  "include": ["src/*.ts", "src/**/*.ts", "database/seed/*.ts", "test/**/*.ts"],
+  "exclude": [
+    "./node_modules/*",
+    "./node_modules/@types"
+  ],
+  "buildOptions": true,
+  "compileOnSave": true
 }

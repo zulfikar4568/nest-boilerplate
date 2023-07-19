@@ -20,8 +20,9 @@ export class DashboardFactoryService {
   updateDashboard(createDashboardDto: UpdateDashboardDto) {
     const newDashboard = new Dashboard();
 
-    newDashboard.name = createDashboardDto.name;
-    newDashboard.description = createDashboardDto.description;
+    if (createDashboardDto.name) newDashboard.name = createDashboardDto.name;
+    if (createDashboardDto.description)
+      newDashboard.description = createDashboardDto.description;
 
     return newDashboard;
   }

@@ -1,9 +1,9 @@
-import { DataServiceModule } from '../../services/data-services/data-service.module';
-import { DashboardFactoryService } from './dashboard-factory.service';
-import { DashboardUseCase } from './dashboard.usecase';
 import { TestingModule, Test } from '@nestjs/testing';
+import { DataServiceModule } from '../../services/data-services/data-service.module';
 import { AuditServiceModule } from '../../services/audit-services/audit.service.module';
 import { IDataServices } from '../../core/abstracts';
+import { DashboardFactoryService } from './dashboard-factory.service';
+import { DashboardUseCase } from './dashboard.usecase';
 
 describe('DashboardUsecase', () => {
   let service: DashboardUseCase;

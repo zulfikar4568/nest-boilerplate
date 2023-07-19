@@ -1,14 +1,14 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { DashboardUseCase } from '../../src/usecases/dashboards';
-import * as request from 'supertest';
 import {
   CreateDashboardDto,
   UpdateDashboardDto,
 } from '../../src/core/dtos/dashboard.dto';
 import { DashboardFactoryService } from '../../src/usecases/dashboards/dashboard-factory.service';
-import { Dashboard } from 'src/core/entities';
+import { Dashboard } from '../../src/core/entities';
 
 describe('DashboardController', () => {
   let app: INestApplication;

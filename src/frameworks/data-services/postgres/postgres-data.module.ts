@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { PostgresDashboardModel } from './model';
 import { IDataServices } from '../../../core/abstracts';
 import { PostgresDataService } from './postgres-data.service';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [],
+  imports: [PrismaModule],
   providers: [
-    PostgresDashboardModel,
     {
       provide: IDataServices,
       useClass: PostgresDataService,

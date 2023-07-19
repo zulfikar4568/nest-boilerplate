@@ -1,8 +1,8 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { IDataServices, IGenericRepository } from '../../../core/abstracts';
 import { Dashboard } from '../../../core/entities';
-import { PostgresGenericRepository } from './postgres-generic.repository';
-import { PostgresDashboardModel } from './model';
+import { DashboardRepository } from './repositories/dashboard.respository';
+import PrismaService from './prisma/prisma.service';
 
 @Injectable()
 export class PostgresDataService
@@ -10,11 +10,9 @@ export class PostgresDataService
 {
   dashboards: IGenericRepository<Dashboard>;
 
-  constructor(private dashboardRepository: PostgresDashboardModel) {}
+  constructor(private prismaService: PrismaService) {}
 
   onApplicationBootstrap(): void {
-    this.dashboards = new PostgresGenericRepository<Dashboard>(
-      this.dashboardRepository,
-    );
+    this.dashboards = new DashboardRepository(this.prismaService);
   }
 }
