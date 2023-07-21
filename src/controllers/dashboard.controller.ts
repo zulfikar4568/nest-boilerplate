@@ -7,7 +7,7 @@ import {
 import { DashboardUseCase } from '../usecases/dashboards';
 import { DashboardFactoryService } from '../usecases/dashboards/dashboard-factory.service';
 
-@Controller('api/dashboard')
+@Controller('dashboard')
 export class DashboardController {
   constructor(
     private dashboardUseCase: DashboardUseCase,
