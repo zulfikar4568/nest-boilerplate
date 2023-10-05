@@ -2,7 +2,6 @@ import BaseResponse from './base.response';
 
 export interface IErrorResponse {
   code: string;
-  message: string;
   params: Record<string, string>;
 }
 

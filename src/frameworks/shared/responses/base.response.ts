@@ -2,7 +2,7 @@ export default class BaseResponse<R = any, E = any> {
   constructor(
     public success: boolean,
     public message: string,
-    private result: R,
+    public result: R,
     private error: E,
     public meta: any,
   ) {}

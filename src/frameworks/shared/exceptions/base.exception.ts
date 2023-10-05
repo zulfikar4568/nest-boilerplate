@@ -18,7 +18,6 @@ export default class BaseException extends HttpException {
   public getResponse(): IErrorResponse {
     return {
       code: this.code,
-      message: this.message,
       params: this.params,
     };
   }

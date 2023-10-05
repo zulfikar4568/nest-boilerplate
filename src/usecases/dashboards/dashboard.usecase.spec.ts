@@ -2,7 +2,6 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { DataServiceModule } from '../../services/data-services/data-service.module';
 import { AuditServiceModule } from '../../services/audit-services/audit.service.module';
 import { IDataServices } from '../../core/abstracts';
-import { DashboardFactoryService } from './dashboard-factory.service';
 import { DashboardUseCase } from './dashboard.usecase';
 
 describe('DashboardUsecase', () => {
@@ -37,7 +36,7 @@ describe('DashboardUsecase', () => {
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [DataServiceModule, AuditServiceModule],
-      providers: [DashboardUseCase, DashboardFactoryService],
+      providers: [DashboardUseCase],
     })
       .overrideProvider(IDataServices)
       .useValue(mockDataService)
@@ -48,33 +47,6 @@ describe('DashboardUsecase', () => {
 
   it('Dashboard Usecase should be defined', () => {
     expect(service).toBeDefined();
-  });
-
-  it("It's should be defined all Dashboard!", async () => {
-    const data = [
-      {
-        id: expect.any(String),
-        name: 'Dashboard C',
-        description: 'Dasboard Jakarta',
-      },
-      {
-        id: expect.any(String),
-        name: 'Dashboard B',
-        description: 'Dasboard Bandung',
-      },
-    ];
-
-    expect(await service.getAllDashboards()).toEqual(data);
-  });
-
-  it("It's should be defined Dashboard!", async () => {
-    const data = {
-      id: expect.any(String),
-      name: 'Dashboard C',
-      description: 'Dasboard Jakarta',
-    };
-
-    expect(await service.getDashboardById('1')).toEqual(data);
   });
 
   it("It's should be create a Dashboard!", async () => {
@@ -104,6 +76,8 @@ describe('DashboardUsecase', () => {
       description: 'Dasboard Jakarta',
     };
 
-    expect(await service.updateDashboard('1', dto)).toEqual(dataExpected);
+    expect(await service.updateDashboard({ id: '1' }, dto)).toEqual(
+      dataExpected,
+    );
   });
 });

@@ -1,37 +1,91 @@
-import { Dashboard } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
-import { IGenericRepository } from '../../../../core/abstracts';
-import PrismaService from '../prisma/prisma.service';
+import { Dashboard, Prisma } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
+import { NotFoundException } from '../../../shared/exceptions/common.exception';
+import { IDashboardRepository } from '@/core/abstracts/repositories/dashboard.repository';
+import {
+  TCreateDashboardRequestBody,
+  TPrismaTx,
+  TUpdateDashboardRequestBody,
+} from '@/core/entities';
 
 @Injectable()
-export class DashboardRepository implements IGenericRepository<Dashboard> {
-  private _repository: PrismaService;
-
-  constructor(repository: PrismaService) {
-    this._repository = repository;
-  }
-
-  async getAll(): Promise<Dashboard[]> {
-    return await this._repository.dashboard.findMany();
-  }
-
-  async get(id: string): Promise<Dashboard> {
-    const dashboard = await this._repository.dashboard.findUnique({
-      where: { id: id },
+export class DashboardRepository implements IDashboardRepository {
+  async simpleAllData(
+    tx: TPrismaTx,
+  ): Promise<Pick<Dashboard, 'id' | 'name'>[]> {
+    const dashboard = await tx.dashboard.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
     });
 
-    if (!dashboard) throw new Error(`Dashboard ${id} not found!`);
     return dashboard;
   }
-  create(item: Dashboard): Promise<Dashboard> {
-    return this._repository.dashboard.create({
-      data: item,
+
+  async create(
+    body: TCreateDashboardRequestBody,
+    tx: TPrismaTx,
+  ): Promise<Dashboard> {
+    const dashboard = await tx.dashboard.create({
+      data: body,
     });
+
+    return dashboard;
   }
-  update(id: string, item: Dashboard): Promise<Dashboard> {
-    return this._repository.dashboard.update({
-      data: item,
-      where: { id: id },
+
+  async update(
+    id: string,
+    body: TUpdateDashboardRequestBody,
+    tx: TPrismaTx,
+  ): Promise<Dashboard> {
+    const dashboard = await tx.dashboard.update({
+      where: { id },
+      data: body,
     });
+
+    return dashboard;
+  }
+
+  async deleteById(id: string, tx: TPrismaTx): Promise<Dashboard> {
+    const dashboard = await tx.dashboard.delete({
+      where: { id },
+    });
+
+    return dashboard;
+  }
+
+  async getById(id: string, tx: TPrismaTx): Promise<Dashboard> {
+    const dashboard = await tx.dashboard.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!dashboard) {
+      throw new NotFoundException({
+        message: `Dashboard dengan id ${id} tidak ditemukan!`,
+      });
+    }
+
+    return dashboard;
+  }
+
+  async getCountAndListTransaction(
+    findManyArgs: Prisma.DashboardFindManyArgs<DefaultArgs>,
+    countArgs: Prisma.DashboardCountArgs<DefaultArgs>,
+    tx: TPrismaTx,
+  ): Promise<{
+    total: number;
+    dashboard: Dashboard[];
+  }> {
+    const total = await tx.dashboard.count(countArgs);
+    const dashboard = await tx.dashboard.findMany(findManyArgs);
+
+    return {
+      total,
+      dashboard,
+    };
   }
 }

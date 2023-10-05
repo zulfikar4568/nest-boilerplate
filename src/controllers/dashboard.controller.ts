@@ -1,55 +1,82 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { CreateDashboardResponseDto } from '../core/dtos/create-dashboard.dto';
 import {
-  CreateDashboardDto,
-  UpdateDashboardDto,
-} from '../core/dtos/dashboard.dto';
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { DashboardUseCase } from '../usecases/dashboards';
-import { DashboardFactoryService } from '../usecases/dashboards/dashboard-factory.service';
+import SuccessResponse from '@/frameworks/shared/responses/success.response';
+import {
+  CreateDashboardSerializer,
+  DeleteDashboardSerializer,
+  UpdateDashboardSerializer,
+} from '@/core/serializer/dashboard.serializer';
+import Serializer from '@/frameworks/shared/decorators/serializer.decorator';
+import {
+  CreateDashboardValidator,
+  DeleteDashboardParamsValidator,
+  UpdateDashboardParamsValidator,
+  UpdateDashboardValidator,
+} from '@/core/validator/dashboard.validator';
 
+@ApiTags('Dashboard')
 @Controller('dashboard')
 export class DashboardController {
-  constructor(
-    private dashboardUseCase: DashboardUseCase,
-    private dashboardFactory: DashboardFactoryService,
-  ) {}
+  constructor(private dashboardUseCase: DashboardUseCase) {}
 
-  @Get()
-  async getAll() {
-    return this.dashboardUseCase.getAllDashboards();
-  }
+  @Get('all')
+  @HttpCode(HttpStatus.OK)
+  // @Authentication(true)
+  // @Authorization(Role.USER)
+  public async allSimple() {
+    const result = await this.dashboardUseCase.allSimpleDashboard();
 
-  @Get(':id')
-  async getById(@Param('id') id: any) {
-    return this.dashboardUseCase.getDashboardById(id);
+    return new SuccessResponse('dashboard fetched successfully', result);
   }
 
   @Post()
-  async createDashboard(
-    @Body() dashboardDto: CreateDashboardDto,
-  ): Promise<CreateDashboardResponseDto> {
-    const createDashboardResponse = new CreateDashboardResponseDto();
-    try {
-      const dashboard = this.dashboardFactory.createDashboard(dashboardDto);
-      const createDashboard = await this.dashboardUseCase.createDashboard(
-        dashboard,
-      );
+  @HttpCode(HttpStatus.CREATED)
+  @Serializer(CreateDashboardSerializer)
+  // @Authentication(true)
+  // @Authorization(Role.USER)
+  public async create(
+    @Body() body: CreateDashboardValidator,
+  ): Promise<SuccessResponse> {
+    const result = await this.dashboardUseCase.createDashboard(body);
 
-      createDashboardResponse.success = true;
-      createDashboardResponse.createdDashboard = createDashboard;
-    } catch (error) {
-      createDashboardResponse.success = false;
-    }
-
-    return createDashboardResponse;
+    return new SuccessResponse('dashboard created successfully', result);
   }
 
-  @Put(':id')
-  updateDashboard(
-    @Param('id') dashboardId: string,
-    @Body() updateDashboardDto: UpdateDashboardDto,
-  ) {
-    const dashboard = this.dashboardFactory.updateDashboard(updateDashboardDto);
-    return this.dashboardUseCase.updateDashboard(dashboardId, dashboard);
+  @Patch('/:id')
+  @HttpCode(HttpStatus.CREATED)
+  @Serializer(UpdateDashboardSerializer)
+  // @Authentication(true)
+  // @Authorization(Role.USER)
+  public async update(
+    @Param() params: UpdateDashboardParamsValidator,
+    @Body() body: UpdateDashboardValidator,
+  ): Promise<SuccessResponse> {
+    const result = await this.dashboardUseCase.updateDashboard(params, body);
+
+    return new SuccessResponse('dashboard updated successfully', result);
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.CREATED)
+  @Serializer(DeleteDashboardSerializer)
+  // @Authentication(true)
+  // @Authorization(Role.USER)
+  public async delete(
+    @Param() params: DeleteDashboardParamsValidator,
+  ): Promise<SuccessResponse> {
+    const result = await this.dashboardUseCase.deleteBarang(params);
+
+    return new SuccessResponse('dashboard deleted successfully', result);
   }
 }

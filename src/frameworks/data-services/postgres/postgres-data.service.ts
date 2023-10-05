@@ -1,18 +1,15 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { IDataServices, IGenericRepository } from '../../../core/abstracts';
-import { Dashboard } from '../../../core/entities';
+import { IDataServices } from '../../../core/abstracts';
 import { DashboardRepository } from './repositories/dashboard.respository';
-import PrismaService from './prisma/prisma.service';
+import { IDashboardRepository } from '@/core/abstracts/repositories/dashboard.repository';
 
 @Injectable()
 export class PostgresDataService
   implements IDataServices, OnApplicationBootstrap
 {
-  dashboards: IGenericRepository<Dashboard>;
-
-  constructor(private prismaService: PrismaService) {}
+  dashboards: IDashboardRepository;
 
   onApplicationBootstrap(): void {
-    this.dashboards = new DashboardRepository(this.prismaService);
+    this.dashboards = new DashboardRepository();
   }
 }

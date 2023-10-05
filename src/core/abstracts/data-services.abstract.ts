@@ -1,6 +1,5 @@
-import { Dashboard } from '../entities';
-import { IGenericRepository } from './generic-repository.abstract';
+import { IDashboardRepository } from './repositories/dashboard.repository';
 
 export abstract class IDataServices {
-  abstract dashboards: IGenericRepository<Dashboard>;
+  abstract dashboards: IDashboardRepository;
 }

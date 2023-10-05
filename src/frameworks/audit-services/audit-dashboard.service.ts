@@ -1,5 +1,5 @@
+import { Dashboard } from '@prisma/client';
 import { IAuditServices } from 'src/core/abstracts';
-import { Dashboard } from '../../core/entities';
 
 export class AuditDashboardService implements IAuditServices<Dashboard> {
   addHistoryAudit(data: Dashboard): Promise<boolean> {

@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["tracing"]
 }
 
 datasource db {
@@ -11,7 +12,50 @@ datasource db {
 }
 
 model Dashboard {
-  id          String @id @default(uuid()) @db.VarChar(36)
-  name        String @unique @db.VarChar(50)
+  id          String  @id @default(uuid()) @db.VarChar(36)
+  name        String  @unique @db.VarChar(50)
   description String? @db.Text()
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("dashboards")
+}
+
+// Authentication
+model User {
+  id          String    @id @default(uuid()) @db.VarChar(36)
+  namaLengkap String    @db.VarChar(100)
+  email       String?   @db.VarChar(50)
+  noHP        String?   @db.VarChar(15)
+  deskripsi   String?   @db.Text
+  username    String    @unique @db.VarChar(50)
+  password    String    @db.Text
+  sessions    Session[]
+  roles       Role[]    @default([USER])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model Session {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @db.VarChar(36)
+  token     String   @unique @db.Text
+  refresh   String   @unique @db.VarChar(255)
+  data      Json
+  expiredAt DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sessions")
 }
