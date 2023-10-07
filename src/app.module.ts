@@ -4,7 +4,7 @@ import { OpenTelemetryModule } from 'nestjs-otel';
 import { LoggerModule } from 'nestjs-pino';
 import { DataServiceModule } from './services/data-services/data-service.module';
 import { DashboardUseCaseModule } from './usecases/dashboards/dashboard.usecase.module';
-import { AuditServiceModule } from './services/audit-services/audit.service.module';
+import { MessagingServiceModule } from './services/messaging-services/messaging.service.module';
 import { DashboardController } from './controllers';
 import HealthModule from './frameworks/health/health.module';
 import AuthModule from './frameworks/auth/auth.module';
@@ -44,7 +44,7 @@ const PinoLoggerModule = LoggerModule.forRoot({
     TerminusModule,
     OpenTelemetryModuleConfig,
     PinoLoggerModule,
-    AuditServiceModule,
+    MessagingServiceModule,
     HealthModule,
     AuthModule,
 

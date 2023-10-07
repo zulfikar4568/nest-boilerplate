@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AuditServiceModule } from '../../services/audit-services/audit.service.module';
+import { MessagingServiceModule } from '../../services/messaging-services/messaging.service.module';
 import { DataServiceModule } from '../../services/data-services/data-service.module';
 import { DashboardUseCase } from './dashboard.usecase';
 
 @Module({
-  imports: [DataServiceModule, AuditServiceModule],
+  imports: [DataServiceModule, MessagingServiceModule],
   providers: [DashboardUseCase],
   exports: [DashboardUseCase],
 })

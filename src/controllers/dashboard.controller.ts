@@ -42,7 +42,7 @@ export class DashboardController {
   // @Authentication(true)
   // @Authorization(Role.USER)
   public async allSimple() {
-    const result = await this.dashboardUseCase.allSimpleDashboard();
+    const result = await this.dashboardUseCase.listDropdown();
 
     return new SuccessResponse('dashboard fetched successfully', result);
   }
@@ -55,7 +55,7 @@ export class DashboardController {
   // @Authentication(true)
   // @Authorization(Role.USER)
   public async lists(@Context() ctx: IContext) {
-    const { meta, result } = await this.dashboardUseCase.listDashboard(ctx);
+    const { meta, result } = await this.dashboardUseCase.list(ctx);
 
     return new SuccessResponse('barang fetched successfully', result, meta);
   }
@@ -68,7 +68,7 @@ export class DashboardController {
   public async create(
     @Body() body: CreateDashboardValidator,
   ): Promise<SuccessResponse> {
-    const result = await this.dashboardUseCase.createDashboard(body);
+    const result = await this.dashboardUseCase.create(body);
 
     return new SuccessResponse('dashboard created successfully', result);
   }
@@ -82,7 +82,7 @@ export class DashboardController {
     @Param() params: UpdateDashboardParamsValidator,
     @Body() body: UpdateDashboardValidator,
   ): Promise<SuccessResponse> {
-    const result = await this.dashboardUseCase.updateDashboard(params, body);
+    const result = await this.dashboardUseCase.update(params, body);
 
     return new SuccessResponse('dashboard updated successfully', result);
   }
@@ -95,7 +95,7 @@ export class DashboardController {
   public async delete(
     @Param() params: DeleteDashboardParamsValidator,
   ): Promise<SuccessResponse> {
-    const result = await this.dashboardUseCase.deleteBarang(params);
+    const result = await this.dashboardUseCase.delete(params);
 
     return new SuccessResponse('dashboard deleted successfully', result);
   }

@@ -1,5 +1,13 @@
-import { Dashboard, Prisma } from '@prisma/client';
+import { Dashboard as TDashboard, Prisma } from '@prisma/client';
 import { IListRequestQuery } from './query-cursor.entity';
+
+export class Dashboard implements TDashboard {
+  id: string;
+  name: string;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export type OptionalDashboard = Partial<Dashboard>;
 export type RequiredDashboard = Required<Dashboard>;

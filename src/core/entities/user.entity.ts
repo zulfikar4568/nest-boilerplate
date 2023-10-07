@@ -1,5 +1,18 @@
-import { Prisma, User } from '@prisma/client';
+import { Prisma, Role, User as TUser } from '@prisma/client';
 import { IListRequestQuery } from './query-cursor.entity';
+
+export class User implements TUser {
+  id: string;
+  namaLengkap: string;
+  email: string | null;
+  noHP: string | null;
+  deskripsi: string | null;
+  username: string;
+  password: string;
+  roles: Role[];
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export type OptionalUser = Partial<User>;
 export type RequiredUser = Required<User>;

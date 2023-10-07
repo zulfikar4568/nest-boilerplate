@@ -1,8 +1,10 @@
 import { Dashboard } from '@prisma/client';
-import { IAuditServices } from 'src/core/abstracts';
+import { IMessagingServices } from 'src/core/abstracts';
 
-export class AuditDashboardService implements IAuditServices<Dashboard> {
-  addHistoryAudit(data: Dashboard): Promise<boolean> {
+export class MessagingDashboardService
+  implements IMessagingServices<Dashboard>
+{
+  sendAudit(data: Dashboard): Promise<boolean> {
     return this.sendingDataToTheAudit(data);
   }
 

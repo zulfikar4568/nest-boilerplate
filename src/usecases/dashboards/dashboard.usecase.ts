@@ -2,10 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { Dashboard } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Span } from 'nestjs-otel';
-import { IAuditServices, IDataServices } from '../../core/abstracts';
-import PrismaService from '../../frameworks/data-services/postgres/prisma/prisma.service';
+import { IMessagingServices, IDataServices } from '../../core/abstracts';
+import PrismaService from '../../frameworks/data-services/prisma/prisma.service';
 import { IContext } from '../../frameworks/shared/interceptors/context.interceptor';
-import { parseQueryCursor } from '../../frameworks/shared/utils/query-cursor.util';
 import {
   EErrorCommonCode,
   UnknownException,
@@ -15,7 +14,6 @@ import {
   IListResult,
   TCreateDashboardRequestBody,
   TDeleteDashboardByIdRequestParams,
-  TListDashboardRequestQuery,
   TUpdateDashboardByIdRequestParams,
   TUpdateDashboardRequestBody,
 } from '../../core/entities';
@@ -24,15 +22,15 @@ import {
 export class DashboardUseCase {
   constructor(
     private readonly dataServices: IDataServices,
-    private readonly auditServices: IAuditServices<Dashboard>,
+    private readonly auditServices: IMessagingServices<Dashboard>,
     private db: PrismaService,
   ) {}
 
   @Span('Usecase All Simple Dashboards')
-  async allSimpleDashboard(): Promise<Pick<Dashboard, 'id' | 'name'>[]> {
+  async listDropdown(): Promise<Pick<Dashboard, 'id' | 'name'>[]> {
     try {
       return await this.db.$transaction(async (tx) => {
-        return await this.dataServices.dashboards.simpleAllData(tx);
+        return await this.dataServices.dashboards.listDropdown(tx);
       });
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -48,14 +46,14 @@ export class DashboardUseCase {
   }
 
   @Span('Usecase Create Dashboard')
-  async createDashboard(body: TCreateDashboardRequestBody): Promise<Dashboard> {
+  async create(body: TCreateDashboardRequestBody): Promise<Dashboard> {
     try {
       const dashboard = await this.db.$transaction(async (tx) => {
         return await this.dataServices.dashboards.create(body, tx);
       });
 
       // Setelah selesai kirim ke dashboard, kirim ke notifikasi ke audit
-      await this.auditServices.addHistoryAudit(dashboard);
+      await this.auditServices.sendAudit(dashboard);
 
       return dashboard;
     } catch (error: any) {
@@ -72,7 +70,7 @@ export class DashboardUseCase {
   }
 
   @Span('Usecase Update Dashboard')
-  async updateDashboard(
+  async update(
     params: TUpdateDashboardByIdRequestParams,
     body: TUpdateDashboardRequestBody,
   ): Promise<Dashboard> {
@@ -82,7 +80,7 @@ export class DashboardUseCase {
       });
 
       // Setelah selesai kirim ke dashboard, kirim ke notifikasi ke audit
-      await this.auditServices.addHistoryAudit(dashboard);
+      await this.auditServices.sendAudit(dashboard);
 
       return dashboard;
     } catch (error: any) {
@@ -99,13 +97,11 @@ export class DashboardUseCase {
   }
 
   @Span('Usecase Delete Dashboard')
-  async deleteBarang(
-    params: TDeleteDashboardByIdRequestParams,
-  ): Promise<Dashboard> {
+  async delete(params: TDeleteDashboardByIdRequestParams): Promise<Dashboard> {
     try {
       return await this.db.$transaction(async (tx) => {
-        await this.dataServices.dashboards.getById(params.id, tx);
-        return await this.dataServices.dashboards.deleteById(params.id, tx);
+        await this.dataServices.dashboards.get(params.id, tx);
+        return await this.dataServices.dashboards.delete(params.id, tx);
       });
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -121,51 +117,10 @@ export class DashboardUseCase {
   }
 
   @Span('Usecase List Dashboard')
-  async listDashboard(ctx: IContext): Promise<IListResult<Dashboard>> {
+  async list(ctx: IContext): Promise<IListResult<Dashboard>> {
     try {
       return await this.db.$transaction(async (tx) => {
-        const query = ctx.params.query as TListDashboardRequestQuery;
-
-        const { limit, order, cursor } =
-          parseQueryCursor<TListDashboardRequestQuery>(query);
-
-        const selectOptions = {
-          orderBy: order,
-          where: query.filters.field,
-        };
-
-        let pageOptions = {
-          take: limit,
-        };
-
-        if (cursor !== undefined && cursor !== '') {
-          await this.dataServices.dashboards.getById(cursor, tx);
-
-          pageOptions = {
-            ...pageOptions,
-            ...{ cursor: { id: cursor }, skip: 1 },
-          };
-        }
-
-        const queryData =
-          await this.dataServices.dashboards.getCountAndListTransaction(
-            { ...pageOptions, ...selectOptions },
-            selectOptions,
-            tx,
-          );
-
-        const lastCursor =
-          queryData.dashboard.length > 0
-            ? queryData.dashboard[queryData.dashboard.length - 1].id
-            : '';
-
-        return {
-          result: queryData.dashboard,
-          meta: {
-            lastCursor: lastCursor,
-            total: queryData.total,
-          },
-        };
+        return this.dataServices.dashboards.list(ctx, tx);
       });
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {

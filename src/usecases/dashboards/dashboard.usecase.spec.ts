@@ -1,6 +1,6 @@
 import { TestingModule, Test } from '@nestjs/testing';
 import { DataServiceModule } from '../../services/data-services/data-service.module';
-import { AuditServiceModule } from '../../services/audit-services/audit.service.module';
+import { MessagingServiceModule } from '../../services/messaging-services/messaging.service.module';
 import { IDataServices } from '../../core/abstracts';
 import { DashboardUseCase } from './dashboard.usecase';
 
@@ -35,7 +35,7 @@ describe('DashboardUsecase', () => {
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [DataServiceModule, AuditServiceModule],
+      imports: [DataServiceModule, MessagingServiceModule],
       providers: [DashboardUseCase],
     })
       .overrideProvider(IDataServices)
@@ -61,7 +61,7 @@ describe('DashboardUsecase', () => {
       description: 'Dasboard Jakarta',
     };
 
-    expect(await service.createDashboard(dto)).toEqual(dataExpected);
+    expect(await service.create(dto)).toEqual(dataExpected);
   });
 
   it("It's should be update the Dashboard!", async () => {
@@ -76,8 +76,6 @@ describe('DashboardUsecase', () => {
       description: 'Dasboard Jakarta',
     };
 
-    expect(await service.updateDashboard({ id: '1' }, dto)).toEqual(
-      dataExpected,
-    );
+    expect(await service.update({ id: '1' }, dto)).toEqual(dataExpected);
   });
 });

@@ -13,7 +13,7 @@ import {
   HealthCheckResult,
 } from '@nestjs/terminus';
 import { ApiTags } from '@nestjs/swagger';
-import PrismaService from '@/frameworks/data-services/postgres/prisma/prisma.service';
+import PrismaService from '@/frameworks/data-services/prisma/prisma.service';
 
 @ApiTags('Health')
 @Controller()
