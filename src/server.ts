@@ -4,12 +4,12 @@ import cookieParser from 'cookie-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import appConfig from './config/app.config';
-import HttpExceptionFilter from './frameworks/shared/filters/http.filter';
-import ContextInterceptor from './frameworks/shared/interceptors/context.interceptor';
-import log from './frameworks/shared/utils/log.util';
-import ValidationPipe from './frameworks/shared/pipes/validation.pipe';
+import HttpExceptionFilter from './core/base/frameworks/shared/filters/http.filter';
+import ContextInterceptor from './core/base/frameworks/shared/interceptors/context.interceptor';
+import log from './core/base/frameworks/shared/utils/log.util';
+import ValidationPipe from './core/base/frameworks/shared/pipes/validation.pipe';
 import otelSDK from './tracing';
-import UnknownExceptionsFilter from '@/frameworks/shared/filters/unknown.filter';
+import UnknownExceptionsFilter from '@/core/base/frameworks/shared/filters/unknown.filter';
 
 const printConfig = () => {
   log.info(`Connected to Grafana Loki: ${appConfig.LOKI_HOST}`);

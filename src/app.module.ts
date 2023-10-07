@@ -2,14 +2,11 @@ import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { OpenTelemetryModule } from 'nestjs-otel';
 import { LoggerModule } from 'nestjs-pino';
-import { DataServiceModule } from './services/data-services/data-service.module';
-import { DashboardUseCaseModule } from './usecases/dashboards/dashboard.usecase.module';
-import { MessagingServiceModule } from './services/messaging-services/messaging.service.module';
-import { DashboardController } from './controllers';
-import HealthModule from './frameworks/health/health.module';
-import AuthModule from './frameworks/auth/auth.module';
-import { InstrumentMiddleware } from './frameworks/shared/middlewares/instrument.middleware';
-import { logger } from './frameworks/shared/utils/log.util';
+import HealthModule from './core/base/frameworks/health/health.module';
+import AuthModule from './core/base/frameworks/auth/auth.module';
+import { InstrumentMiddleware } from './core/base/frameworks/shared/middlewares/instrument.middleware';
+import { logger } from './core/base/frameworks/shared/utils/log.util';
+import { RegistrationModule } from './modules/registration.module';
 
 const OpenTelemetryModuleConfig = OpenTelemetryModule.forRoot({
   metrics: {
@@ -44,16 +41,12 @@ const PinoLoggerModule = LoggerModule.forRoot({
     TerminusModule,
     OpenTelemetryModuleConfig,
     PinoLoggerModule,
-    MessagingServiceModule,
     HealthModule,
     AuthModule,
 
     //bussines
-    DataServiceModule,
-    DashboardUseCaseModule,
+    RegistrationModule,
   ],
-  controllers: [DashboardController],
-  providers: [],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {
