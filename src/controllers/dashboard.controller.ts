@@ -15,15 +15,22 @@ import SuccessResponse from '@/frameworks/shared/responses/success.response';
 import {
   CreateDashboardSerializer,
   DeleteDashboardSerializer,
+  ListDashboardSerializer,
   UpdateDashboardSerializer,
 } from '@/core/serializer/dashboard.serializer';
 import Serializer from '@/frameworks/shared/decorators/serializer.decorator';
 import {
   CreateDashboardValidator,
   DeleteDashboardParamsValidator,
+  FilterDashboardQueryValidator,
+  ListDashboardQueryValidator,
   UpdateDashboardParamsValidator,
   UpdateDashboardValidator,
 } from '@/core/validator/dashboard.validator';
+import UseList from '@/frameworks/shared/decorators/uselist.decorator';
+import { ApiFilterQuery } from '@/frameworks/shared/decorators/api-filter-query.decorator';
+import Context from '@/frameworks/shared/decorators/context.decorator';
+import { IContext } from '@/frameworks/shared/interceptors/context.interceptor';
 
 @ApiTags('Dashboard')
 @Controller('dashboard')
@@ -38,6 +45,19 @@ export class DashboardController {
     const result = await this.dashboardUseCase.allSimpleDashboard();
 
     return new SuccessResponse('dashboard fetched successfully', result);
+  }
+
+  @Get('')
+  @HttpCode(HttpStatus.OK)
+  @UseList(FilterDashboardQueryValidator)
+  @Serializer(ListDashboardSerializer)
+  @ApiFilterQuery('filters', ListDashboardQueryValidator)
+  // @Authentication(true)
+  // @Authorization(Role.USER)
+  public async lists(@Context() ctx: IContext) {
+    const { meta, result } = await this.dashboardUseCase.listDashboard(ctx);
+
+    return new SuccessResponse('barang fetched successfully', result, meta);
   }
 
   @Post()

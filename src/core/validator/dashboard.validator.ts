@@ -1,11 +1,84 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import {
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
+import { Dashboard, Prisma } from '@prisma/client';
+import { Expose, Type } from 'class-transformer';
+import {
+  BaseQueryValidator,
+  DateTimeFilterQuery,
+  StringFilterQuery,
   TCreateDashboardRequestBody,
   TDeleteDashboardByIdRequestParams,
+  TListDashboardRequestQuery,
   TUpdateDashboardByIdRequestParams,
   TUpdateDashboardRequestBody,
 } from '../entities';
+
+export class ListDashboardQueryField implements Prisma.DashboardWhereInput {
+  @Expose()
+  @ValidateNested()
+  @IsOptional()
+  @Type(() => StringFilterQuery)
+  @ApiPropertyOptional({ type: StringFilterQuery })
+  id?: string | Prisma.StringFilter<'Dashboard'> | undefined;
+
+  @Expose()
+  @ValidateNested()
+  @IsOptional()
+  @Type(() => StringFilterQuery)
+  @ApiPropertyOptional({ type: StringFilterQuery })
+  name?: string | Prisma.StringFilter<'Dashboard'> | undefined;
+
+  @Expose()
+  @ValidateNested()
+  @IsOptional()
+  @Type(() => StringFilterQuery)
+  @ApiPropertyOptional({ type: StringFilterQuery })
+  description?:
+    | string
+    | Prisma.StringNullableFilter<'Dashboard'>
+    | null
+    | undefined;
+
+  @Expose()
+  @ValidateNested()
+  @IsOptional()
+  @Type(() => DateTimeFilterQuery)
+  @ApiPropertyOptional({ type: DateTimeFilterQuery })
+  createdAt?: string | Date | Prisma.DateTimeFilter<'Dashboard'> | undefined;
+
+  @Expose()
+  @ValidateNested()
+  @IsOptional()
+  @Type(() => DateTimeFilterQuery)
+  @ApiPropertyOptional({ type: DateTimeFilterQuery })
+  updatedAt?: string | Date | Prisma.DateTimeFilter<'Dashboard'> | undefined;
+}
+
+export class ListDashboardQueryValidator extends BaseQueryValidator<Dashboard> {
+  @ValidateNested()
+  @IsOptional()
+  @IsObject()
+  @Type(() => ListDashboardQueryField)
+  @ApiPropertyOptional({ type: ListDashboardQueryField })
+  field?: ListDashboardQueryField;
+}
+
+export class FilterDashboardQueryValidator
+  implements TListDashboardRequestQuery
+{
+  @ValidateNested()
+  @IsOptional()
+  @IsObject()
+  @Type(() => ListDashboardQueryValidator)
+  filters: ListDashboardQueryValidator;
+}
 
 export class CreateDashboardValidator implements TCreateDashboardRequestBody {
   @IsNotEmpty()

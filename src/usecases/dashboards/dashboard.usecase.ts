@@ -120,8 +120,8 @@ export class DashboardUseCase {
     }
   }
 
-  @Span('Usecase List Barang')
-  async listBarang(ctx: IContext): Promise<IListResult<Dashboard>> {
+  @Span('Usecase List Dashboard')
+  async listDashboard(ctx: IContext): Promise<IListResult<Dashboard>> {
     try {
       return await this.db.$transaction(async (tx) => {
         const query = ctx.params.query as TListDashboardRequestQuery;
