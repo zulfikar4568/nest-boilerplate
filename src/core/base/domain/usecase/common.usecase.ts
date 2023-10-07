@@ -1,14 +1,14 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Span } from 'nestjs-otel';
 import { GenericRepository } from '../../data/generic.repository';
-import log from '@/core/base/frameworks/shared/utils/log.util';
-import PrismaService from '@/core/base/frameworks/data-services/prisma/prisma.service';
+import log from '../../frameworks/shared/utils/log.util';
+import { IContext } from '../../frameworks/shared/interceptors/context.interceptor';
 import {
   EErrorCommonCode,
   UnknownException,
-} from '@/core/base/frameworks/shared/exceptions/common.exception';
-import { IListResult } from '@/core/base/domain/entities';
-import { IContext } from '@/core/base/frameworks/shared/interceptors/context.interceptor';
+} from '../../frameworks/shared/exceptions/common.exception';
+import { IListResult } from '../entities';
+import PrismaService from '../../frameworks/data-services/prisma/prisma.service';
 
 export abstract class CommonUseCase<T extends Record<string, any>, C, U> {
   constructor(

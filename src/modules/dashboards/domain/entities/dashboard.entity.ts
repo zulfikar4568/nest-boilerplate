@@ -1,6 +1,6 @@
 import { Dashboard as TDashboard, Prisma } from '@prisma/client';
 import { IListRequestQuery } from '../../../../core/base/domain/entities/query-cursor.entity';
-import { BaseEntity } from '@/core/base/domain/entities';
+import { BaseEntity } from '../../../../core/base/domain/entities';
 
 export class Dashboard extends BaseEntity implements TDashboard {}
 

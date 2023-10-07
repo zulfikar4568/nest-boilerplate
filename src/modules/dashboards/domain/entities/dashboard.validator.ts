@@ -1,14 +1,7 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsObject,
-  IsOptional,
-  IsString,
-  IsUUID,
-  ValidateNested,
-} from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsObject, IsOptional, ValidateNested } from 'class-validator';
 import { Dashboard, Prisma } from '@prisma/client';
-import { Expose, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import {
   TCreateDashboardRequestBody,
   TDeleteDashboardByIdRequestParams,
@@ -18,50 +11,17 @@ import {
 } from '../entities/dashboard.entity';
 import {
   BaseQueryValidator,
-  DateTimeFilterQuery,
-  StringFilterQuery,
+  ListQueryField,
 } from '@/core/base/domain/entities';
+import {
+  CreateValidator,
+  IDValidator,
+  UpdateValidator,
+} from '@/core/base/domain/entities/validator.entity';
 
-export class ListDashboardQueryField implements Prisma.DashboardWhereInput {
-  @Expose()
-  @ValidateNested()
-  @IsOptional()
-  @Type(() => StringFilterQuery)
-  @ApiPropertyOptional({ type: StringFilterQuery })
-  id?: string | Prisma.StringFilter<'Dashboard'> | undefined;
-
-  @Expose()
-  @ValidateNested()
-  @IsOptional()
-  @Type(() => StringFilterQuery)
-  @ApiPropertyOptional({ type: StringFilterQuery })
-  name?: string | Prisma.StringFilter<'Dashboard'> | undefined;
-
-  @Expose()
-  @ValidateNested()
-  @IsOptional()
-  @Type(() => StringFilterQuery)
-  @ApiPropertyOptional({ type: StringFilterQuery })
-  description?:
-    | string
-    | Prisma.StringNullableFilter<'Dashboard'>
-    | null
-    | undefined;
-
-  @Expose()
-  @ValidateNested()
-  @IsOptional()
-  @Type(() => DateTimeFilterQuery)
-  @ApiPropertyOptional({ type: DateTimeFilterQuery })
-  createdAt?: string | Date | Prisma.DateTimeFilter<'Dashboard'> | undefined;
-
-  @Expose()
-  @ValidateNested()
-  @IsOptional()
-  @Type(() => DateTimeFilterQuery)
-  @ApiPropertyOptional({ type: DateTimeFilterQuery })
-  updatedAt?: string | Date | Prisma.DateTimeFilter<'Dashboard'> | undefined;
-}
+export class ListDashboardQueryField
+  extends ListQueryField
+  implements Prisma.DashboardWhereInput {}
 
 export class ListDashboardQueryValidator extends BaseQueryValidator<Dashboard> {
   @ValidateNested()
@@ -82,54 +42,18 @@ export class FilterDashboardQueryValidator
   filters: ListDashboardQueryValidator;
 }
 
-export class CreateDashboardValidator implements TCreateDashboardRequestBody {
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({
-    example: 'Test',
-    description: 'Name!',
-  })
-  name: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiPropertyOptional({
-    example: 'Test Description',
-    description: 'Description Dashboard!',
-  })
-  description: string | null;
-}
+export class CreateDashboardValidator
+  extends CreateValidator
+  implements TCreateDashboardRequestBody {}
 
 export class UpdateDashboardParamsValidator
-  implements TUpdateDashboardByIdRequestParams
-{
-  @IsUUID()
-  @IsNotEmpty()
-  @ApiProperty({
-    example: '1def564a-42d9-4a94-9bf8-c9c6e4d796a6',
-    description: 'Dashboard ID!',
-  })
-  id: string;
-}
+  extends IDValidator
+  implements TUpdateDashboardByIdRequestParams {}
 
 export class DeleteDashboardParamsValidator
-  extends UpdateDashboardParamsValidator
+  extends IDValidator
   implements TDeleteDashboardByIdRequestParams {}
 
-export class UpdateDashboardValidator implements TUpdateDashboardRequestBody {
-  @IsOptional()
-  @IsString()
-  @ApiProperty({
-    example: 'Test',
-    description: 'Name!',
-  })
-  name?: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiPropertyOptional({
-    example: 'Test Description',
-    description: 'Description Dashboard!',
-  })
-  description?: string | null;
-}
+export class UpdateDashboardValidator
+  extends UpdateValidator
+  implements TUpdateDashboardRequestBody {}
