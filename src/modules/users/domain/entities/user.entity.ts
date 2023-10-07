@@ -1,17 +1,13 @@
 import { Prisma, Role, User as TUser } from '@prisma/client';
 import { IListRequestQuery } from '@/core/base/domain/entities';
+import { BaseEntity } from '@/core/base/domain/entities';
 
-export class User implements TUser {
-  id: string;
-  namaLengkap: string;
+export class User extends BaseEntity implements TUser {
   email: string | null;
   noHP: string | null;
-  deskripsi: string | null;
   username: string;
   password: string;
   roles: Role[];
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export type OptionalUser = Partial<User>;
