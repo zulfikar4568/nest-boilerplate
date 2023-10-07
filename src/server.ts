@@ -1,7 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { VersioningType } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import {
+  DocumentBuilder,
+  SwaggerCustomOptions,
+  SwaggerModule,
+} from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import appConfig from './config/app.config';
 import HttpExceptionFilter from './core/base/frameworks/shared/filters/http.filter';
@@ -59,11 +63,12 @@ const httpServer = new Promise(async (resolve, reject) => {
     app.use(cookieParser());
 
     if (appConfig.NODE_ENV == 'development') {
-      const option = {
+      const option: SwaggerCustomOptions = {
         customCss: `
-        .topbar-wrapper img {content:url('https://aqbgvzzymp.cloudimg.io/v7/barokahabadi.co.id/wp-content/uploads/2020/11/dummy-logo-1b.png'); width:200px; height:auto;}
-        .swagger-ui .topbar { background: #000; }`,
-        customfavIcon: `https://aqbgvzzymp.cloudimg.io/v7/barokahabadi.co.id/wp-content/uploads/2020/11/dummy-logo-1b.png`,
+        .topbar-wrapper a {content: url('https://seeklogo.com/images/E/e-letter-digital-media-company-logo-03BA4A5AE3-seeklogo.com.png'); max-width: 150px !important; height:auto; margin-bottom: 0 !important; margin-top: 0 !important;}
+        .topbar-wrapper a svg {display: none;}
+        .swagger-ui .topbar { background: #fff !important; }`,
+        customfavIcon: `https://seeklogo.com/images/E/e-letter-digital-media-company-logo-03BA4A5AE3-seeklogo.com.png`,
         customSiteTitle: 'Backend API',
       };
 
