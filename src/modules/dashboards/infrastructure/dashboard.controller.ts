@@ -60,7 +60,7 @@ export class DashboardController {
   public async lists(@Context() ctx: IContext) {
     const { meta, result } = await this.dashboardUseCase.list(ctx);
 
-    return new SuccessResponse('barang fetched successfully', result, meta);
+    return new SuccessResponse('dashboard fetched successfully', result, meta);
   }
 
   @Post()
