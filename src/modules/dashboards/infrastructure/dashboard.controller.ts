@@ -10,6 +10,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Role } from '@prisma/client';
 import { DashboardUseCase } from '../domain/usecase/dashboard.usecase';
 import SuccessResponse from '@/core/base/frameworks/shared/responses/success.response';
 import {
@@ -31,6 +32,8 @@ import UseList from '@/core/base/frameworks/shared/decorators/uselist.decorator'
 import { ApiFilterQuery } from '@/core/base/frameworks/shared/decorators/api-filter-query.decorator';
 import Context from '@/core/base/frameworks/shared/decorators/context.decorator';
 import { IContext } from '@/core/base/frameworks/shared/interceptors/context.interceptor';
+import Authentication from '@/core/base/frameworks/shared/decorators/authentication.decorator';
+import Authorization from '@/core/base/frameworks/shared/decorators/authorization.decorator';
 
 @ApiTags('Dashboard')
 @Controller('dashboard')
@@ -39,8 +42,8 @@ export class DashboardController {
 
   @Get('all')
   @HttpCode(HttpStatus.OK)
-  // @Authentication(true)
-  // @Authorization(Role.USER)
+  @Authentication(true)
+  @Authorization(Role.USER)
   public async allSimple() {
     const result = await this.dashboardUseCase.listDropdown();
 
@@ -52,8 +55,8 @@ export class DashboardController {
   @UseList(FilterDashboardQueryValidator)
   @Serializer(ListDashboardSerializer)
   @ApiFilterQuery('filters', ListDashboardQueryValidator)
-  // @Authentication(true)
-  // @Authorization(Role.USER)
+  @Authentication(true)
+  @Authorization(Role.USER)
   public async lists(@Context() ctx: IContext) {
     const { meta, result } = await this.dashboardUseCase.list(ctx);
 
@@ -63,8 +66,8 @@ export class DashboardController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Serializer(CreateDashboardSerializer)
-  // @Authentication(true)
-  // @Authorization(Role.USER)
+  @Authentication(true)
+  @Authorization(Role.USER)
   public async create(
     @Body() body: CreateDashboardValidator,
   ): Promise<SuccessResponse> {
@@ -76,8 +79,8 @@ export class DashboardController {
   @Patch('/:id')
   @HttpCode(HttpStatus.CREATED)
   @Serializer(UpdateDashboardSerializer)
-  // @Authentication(true)
-  // @Authorization(Role.USER)
+  @Authentication(true)
+  @Authorization(Role.USER)
   public async update(
     @Param() params: UpdateDashboardParamsValidator,
     @Body() body: UpdateDashboardValidator,
@@ -90,8 +93,8 @@ export class DashboardController {
   @Delete('/:id')
   @HttpCode(HttpStatus.CREATED)
   @Serializer(DeleteDashboardSerializer)
-  // @Authentication(true)
-  // @Authorization(Role.USER)
+  @Authentication(true)
+  @Authorization(Role.USER)
   public async delete(
     @Param() params: DeleteDashboardParamsValidator,
   ): Promise<SuccessResponse> {

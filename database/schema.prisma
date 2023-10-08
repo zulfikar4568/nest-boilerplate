@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["tracing"]
 }
 
@@ -24,12 +24,12 @@ model Dashboard {
 
 // Authentication
 model User {
-  id          String    @id @default(uuid()) @db.VarChar(36)
-  name        String    @db.VarChar(100)
+  id          String  @id @default(uuid()) @db.VarChar(36)
+  name        String  @db.VarChar(100)
   description String? @db.Text()
-  
+
   email       String?   @db.VarChar(50)
-  noHP        String?   @db.VarChar(15)
+  phoneNumber String?   @db.VarChar(15)
   username    String    @unique @db.VarChar(50)
   password    String    @db.Text
   sessions    Session[]

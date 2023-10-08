@@ -28,7 +28,7 @@
     "noFallthroughCasesInSwitch": false,
     "incremental": true,
   },
-  "include": ["src/*.ts", "src/**/*.ts", "database/seed/*.ts", "test/**/*.ts"],
+  "include": ["src/*.ts", "src/**/*.ts", "database/seeds/*.ts", "test/**/*.ts"],
   "exclude": [
     "./node_modules/*",
     "./node_modules/@types"

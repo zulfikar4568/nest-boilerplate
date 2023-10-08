@@ -1,6 +1,6 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Span } from 'nestjs-otel';
-import { GenericRepository } from '../../data/generic.repository';
+import { BaseRepository } from '../../data/base.repository';
 import log from '../../frameworks/shared/utils/log.util';
 import { IContext } from '../../frameworks/shared/interceptors/context.interceptor';
 import {
@@ -10,9 +10,9 @@ import {
 import { IListResult } from '../entities';
 import PrismaService from '../../frameworks/data-services/prisma/prisma.service';
 
-export abstract class CommonUseCase<T extends Record<string, any>, C, U> {
+export abstract class BaseUseCase<T extends Record<string, any>, C, U> {
   constructor(
-    private readonly repository: GenericRepository<T>,
+    protected readonly repository: BaseRepository<T>,
     protected db: PrismaService,
   ) {}
 

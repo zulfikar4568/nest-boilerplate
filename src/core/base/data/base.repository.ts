@@ -8,12 +8,12 @@ import {
   UpdateRepository,
 } from './methods';
 
-export abstract class GenericRepository<
+export abstract class BaseRepository<
   T extends Record<string, any>,
   C = any,
   U = any,
 > {
-  private _entity: string;
+  protected _entity: string;
 
   constructor(entity: new () => T) {
     this._entity = entity.name.toLowerCase();

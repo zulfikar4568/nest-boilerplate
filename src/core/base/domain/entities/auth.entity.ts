@@ -3,8 +3,7 @@ import { BaseEntity } from './base.entity';
 
 export class User extends BaseEntity implements TUser {
   email: string | null;
-  noHP: string | null;
-  deskripsi: string | null;
+  phoneNumber: string | null;
   username: string;
   password: string;
   roles: Role[];

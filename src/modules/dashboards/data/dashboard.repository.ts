@@ -4,10 +4,10 @@ import {
   TCreateDashboardRequestBody,
   TUpdateDashboardRequestBody,
 } from '../domain/entities/dashboard.entity';
-import { GenericRepository } from '../../../core/base/data/generic.repository';
+import { BaseRepository } from '../../../core/base/data/base.repository';
 
 @Injectable()
-export class DashboardRepository extends GenericRepository<
+export class DashboardRepository extends BaseRepository<
   Dashboard,
   TCreateDashboardRequestBody,
   TUpdateDashboardRequestBody

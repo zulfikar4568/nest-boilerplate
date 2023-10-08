@@ -6,10 +6,10 @@ import {
 } from '../entities/dashboard.entity';
 import { DashboardRepository } from '../../data/dashboard.repository';
 import PrismaService from '../../../../core/base/frameworks/data-services/prisma/prisma.service';
-import { CommonUseCase } from '../../../../core/base/domain/usecase/common.usecase';
+import { BaseUseCase } from '../../../../core/base/domain/usecase/base.usecase';
 
 @Injectable()
-export class DashboardUseCase extends CommonUseCase<
+export class DashboardUseCase extends BaseUseCase<
   Dashboard,
   TCreateDashboardRequestBody,
   TUpdateDashboardRequestBody
