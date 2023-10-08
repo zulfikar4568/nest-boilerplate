@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
-  TCreateUserRequestBody,
+  TCreateUser,
   TUpdateUserRequestBody,
   User,
 } from '../domain/entities/user.entity';
@@ -10,7 +10,7 @@ import { TPrismaTx } from '@/core/base/domain/entities';
 @Injectable()
 export class UserRepository extends BaseRepository<
   User,
-  TCreateUserRequestBody,
+  TCreateUser,
   TUpdateUserRequestBody
 > {
   constructor() {
