@@ -1,5 +1,5 @@
 import { Role } from '@prisma/client';
-import { generatePassword } from '@/core/base/frameworks/shared/utils/password.util';
+import { generatePassword } from '../../src/core/base/frameworks/shared/utils/password.util';
 import { User } from '@/core/base/domain/entities/auth.entity';
 
 type TSeedUser = {
