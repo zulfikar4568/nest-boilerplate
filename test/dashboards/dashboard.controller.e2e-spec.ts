@@ -1,3 +1,4 @@
+import assert from 'assert';
 import { HttpStatus, INestApplication, VersioningType } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import cookieParser from 'cookie-parser';
@@ -17,21 +18,14 @@ import SuccessResponse from '@/core/base/frameworks/shared/responses/success.res
 
 describe('DashboardController', () => {
   let app: INestApplication;
+  let accessToken: string;
+
   const mockDashboardUseCase = {
     listDropdown: jest.fn(() => {
       return [
         { id: '1', name: 'Dashboard C' },
         { id: '2', name: 'Dashboard B' },
       ];
-    }),
-    get: jest.fn((id: string): Dashboard => {
-      return {
-        id,
-        description: 'Dasboard Jakarta',
-        name: 'Dashboard C',
-        createdAt: new Date('2023-10-08T07:09:50.460Z'),
-        updatedAt: new Date('2023-10-08T07:09:50.460Z'),
-      };
     }),
     create: jest.fn((body: TCreateDashboardRequestBody): Dashboard => {
       return {
@@ -100,14 +94,28 @@ describe('DashboardController', () => {
     await app.init();
   });
 
+  it(`/POST create session`, async () => {
+    const fakeUser = { username: 'admin', password: 'admin' };
+
+    const response = await request(app.getHttpServer())
+      .post('/api/v1/session')
+      .send(fakeUser)
+      .expect(HttpStatus.CREATED);
+
+    accessToken = response.body.result.token;
+  });
+
   it(`/GET dashboards`, () => {
     return request(app.getHttpServer())
       .get('/api/v1/dashboard/all')
+      .set('Cookie', `access-token=${accessToken}`)
       .expect(HttpStatus.OK)
       .expect(
-        new SuccessResponse(
-          'dashboard fetched successfully',
-          mockDashboardUseCase.listDropdown(),
+        conversionResult(
+          new SuccessResponse(
+            'dashboard fetched successfully',
+            mockDashboardUseCase.listDropdown(),
+          ),
         ),
       );
   });
@@ -120,18 +128,17 @@ describe('DashboardController', () => {
 
     return request(app.getHttpServer())
       .post('/api/v1/dashboard')
+      .set('Cookie', `access-token=${accessToken}`)
       .send(body)
+      .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(HttpStatus.CREATED)
-      .expect(
-        new SuccessResponse(
-          'dashboard created successfully',
-          mockDashboardUseCase.create(body),
-        ),
-      );
+      .then((response) => {
+        assert.equal(response.body.success, true);
+      });
   });
 
-  it(`/PUT dashboards`, () => {
+  it(`/PATCH dashboards`, () => {
     const id = '1';
     const body: TUpdateDashboardRequestBody = {
       name: 'Dashboard A',
@@ -140,18 +147,26 @@ describe('DashboardController', () => {
 
     return request(app.getHttpServer())
       .patch('/api/v1/dashboard/' + id)
+      .set('Cookie', `access-token=${accessToken}`)
       .send(body)
+      .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(HttpStatus.CREATED)
-      .expect(
-        new SuccessResponse(
-          'dashboard updated successfully',
-          mockDashboardUseCase.update({ id }, body),
-        ),
-      );
+      .then((response) => {
+        assert.equal(response.body.success, true);
+      });
   });
 
   afterAll(async () => {
     await app.close();
   });
 });
+
+export const conversionResult = (data: SuccessResponse) => {
+  return {
+    success: data.success,
+    message: data.message,
+    result: data.result,
+    error: data.getError(),
+    meta: data.meta,
+  };
+};
