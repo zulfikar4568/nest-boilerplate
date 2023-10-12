@@ -20,38 +20,26 @@ export abstract class BaseRepository<
   }
 
   async listDropdown(tx: TPrismaTx): Promise<Pick<T, 'id' | 'name'>[]> {
-    const listRepository = new ListRepository<T>();
-
-    return listRepository.listDropDown(tx, this._entity);
+    return ListRepository.listDropDown<T>(tx, this._entity);
   }
 
   async create(body: C, tx: TPrismaTx): Promise<T> {
-    const createRepository = new CreateRepository<T, C>();
-
-    return createRepository.create(body, tx, this._entity);
+    return CreateRepository.create<T, C>(body, tx, this._entity);
   }
 
   async update(id: string, body: U, tx: TPrismaTx): Promise<T> {
-    const updateRepository = new UpdateRepository<T, U>();
-
-    return updateRepository.update(id, body, tx, this._entity);
+    return UpdateRepository.update<T, U>(id, body, tx, this._entity);
   }
 
   async delete(id: string, tx: TPrismaTx): Promise<T> {
-    const deleteRepository = new DeleteRepository<T>();
-
-    return deleteRepository.delete(id, tx, this._entity);
+    return DeleteRepository.delete<T>(id, tx, this._entity);
   }
 
   async get(id: string, tx: TPrismaTx): Promise<T> {
-    const getRepository = new GetRepository<T>();
-
-    return getRepository.get(id, tx, this._entity);
+    return GetRepository.get<T>(id, tx, this._entity);
   }
 
   async list(ctx: IContext, tx: TPrismaTx): Promise<IListResult<T>> {
-    const listRepository = new ListRepository<T>();
-
-    return listRepository.list(ctx, tx, this._entity);
+    return ListRepository.list<T>(ctx, tx, this._entity);
   }
 }

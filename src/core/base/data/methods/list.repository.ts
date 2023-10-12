@@ -2,8 +2,8 @@ import { IContext } from '../../frameworks/shared/interceptors/context.intercept
 import { parseQueryCursor } from '../../frameworks/shared/utils/query-cursor.util';
 import { IListResult, TPrismaTx } from '../../domain/entities';
 
-export class ListRepository<T extends Record<string, any>> {
-  async listDropDown(
+export class ListRepository {
+  static async listDropDown<T extends Record<string, any>>(
     tx: TPrismaTx,
     entity: string,
   ): Promise<Pick<T, 'id' | 'name'>[]> {
@@ -17,7 +17,7 @@ export class ListRepository<T extends Record<string, any>> {
     return data;
   }
 
-  async list(
+  static async list<T extends Record<string, any>>(
     ctx: IContext,
     tx: TPrismaTx,
     entity: string,
@@ -48,7 +48,7 @@ export class ListRepository<T extends Record<string, any>> {
       };
     }
 
-    const queryData = await this.queryData(
+    const queryData = await ListRepository.queryData<T>(
       { ...pageOptions, ...selectOptions },
       selectOptions,
       tx,
@@ -69,7 +69,7 @@ export class ListRepository<T extends Record<string, any>> {
     };
   }
 
-  private async queryData(
+  private static async queryData<T extends Record<string, any>>(
     totalArgs: any,
     findArgs: any,
     tx: TPrismaTx,
