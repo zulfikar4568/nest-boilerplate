@@ -35,6 +35,10 @@ export abstract class BaseRepository<
     return DeleteRepository.delete<T>(id, tx, this._entity);
   }
 
+  async deleteBatch(ids: string[], tx: TPrismaTx): Promise<{ count: number }> {
+    return DeleteRepository.deleteBatch(ids, tx, this._entity);
+  }
+
   async get(id: string, tx: TPrismaTx): Promise<T> {
     return GetRepository.get<T>(id, tx, this._entity);
   }

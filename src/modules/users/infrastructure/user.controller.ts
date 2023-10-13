@@ -23,6 +23,7 @@ import {
 import Serializer from '@/core/base/frameworks/shared/decorators/serializer.decorator';
 import {
   CreateUserValidator,
+  DeleteUserBatchBodyValidator,
   DeleteUserParamsValidator,
   FilterUserQueryValidator,
   ListUserQueryValidator,
@@ -107,5 +108,17 @@ export class UserController {
     );
 
     return new SuccessResponse('user deleted successfully', result);
+  }
+
+  @Delete('/batch/delete')
+  @HttpCode(HttpStatus.CREATED)
+  @Authentication(true)
+  @Authorization(Role.USER)
+  public async deleteBatch(
+    @Body() body: DeleteUserBatchBodyValidator,
+  ): Promise<SuccessResponse> {
+    const result = await this._usecase.deleteBatch(body);
+
+    return new SuccessResponse('user delete batched successfully', result);
   }
 }

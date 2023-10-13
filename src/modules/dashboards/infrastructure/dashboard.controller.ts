@@ -22,6 +22,7 @@ import {
 import Serializer from '@/core/base/frameworks/shared/decorators/serializer.decorator';
 import {
   CreateDashboardValidator,
+  DeleteDashboardBatchBodyValidator,
   DeleteDashboardParamsValidator,
   FilterDashboardQueryValidator,
   ListDashboardQueryValidator,
@@ -101,5 +102,17 @@ export class DashboardController {
     const result = await this.dashboardUseCase.delete(params);
 
     return new SuccessResponse('dashboard deleted successfully', result);
+  }
+
+  @Delete('/batch/delete')
+  @HttpCode(HttpStatus.CREATED)
+  @Authentication(true)
+  @Authorization(Role.USER)
+  public async deleteBatch(
+    @Body() body: DeleteDashboardBatchBodyValidator,
+  ): Promise<SuccessResponse> {
+    const result = await this.dashboardUseCase.deleteBatch(body);
+
+    return new SuccessResponse('dashboard delete batched successfully', result);
   }
 }

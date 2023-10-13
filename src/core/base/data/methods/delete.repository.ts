@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { TPrismaTx } from '../../domain/entities';
 
 export class DeleteRepository {
@@ -11,5 +12,21 @@ export class DeleteRepository {
     });
 
     return data;
+  }
+
+  static async deleteBatch(
+    ids: string[],
+    tx: TPrismaTx,
+    entity: string,
+  ): Promise<Prisma.BatchPayload> {
+    const deleted = await tx[entity].deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+
+    return deleted;
   }
 }

@@ -27,6 +27,7 @@ import {
 import {
   CreateValidator,
   IDValidator,
+  IDsValidator,
   UpdateValidator,
 } from '@/core/base/domain/entities/validator.entity';
 
@@ -137,6 +138,8 @@ export class UpdateUserParamsValidator
 export class DeleteUserParamsValidator
   extends IDValidator
   implements TDeleteUserByIdRequestParams {}
+
+export class DeleteUserBatchBodyValidator extends IDsValidator {}
 
 export class UpdateUserValidator
   extends UpdateValidator

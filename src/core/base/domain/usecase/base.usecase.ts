@@ -77,6 +77,25 @@ export abstract class BaseUseCase<T extends Record<string, any>, C, U> {
     }
   }
 
+  @Span('usecase batch delete')
+  async deleteBatch(body: { ids: string[] }): Promise<{ count: number }> {
+    try {
+      return await this.db.$transaction(async (tx) => {
+        return await this.repository.deleteBatch(body.ids, tx);
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        log.error(error.message);
+        throw new UnknownException({
+          code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
+          message: `Error tidak terduga ketika menghapus secara batch!`,
+          params: { exception: error.message },
+        });
+      }
+      throw error;
+    }
+  }
+
   @Span('usecase delete')
   async delete(params: { id: string }): Promise<T> {
     try {

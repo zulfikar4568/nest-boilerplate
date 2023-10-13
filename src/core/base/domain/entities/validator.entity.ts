@@ -1,5 +1,25 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
+
+export abstract class IDsValidator {
+  @IsArray()
+  @IsUUID('all', { each: true })
+  @ApiProperty({
+    example: [
+      '1def564a-42d9-4a94-9bf8-c9c6e4d796a6',
+      '1def564a-42d9-4a94-9bf8-c9c6e4d796a6',
+      '1def564a-42d9-4a94-9bf8-c9c6e4d796a6',
+    ],
+    description: 'IDs',
+  })
+  ids: string[];
+}
 
 export abstract class IDValidator {
   @IsUUID()

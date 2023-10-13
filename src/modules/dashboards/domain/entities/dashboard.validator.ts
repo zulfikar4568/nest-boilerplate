@@ -16,6 +16,7 @@ import {
 import {
   CreateValidator,
   IDValidator,
+  IDsValidator,
   UpdateValidator,
 } from '@/core/base/domain/entities/validator.entity';
 
@@ -53,6 +54,8 @@ export class UpdateDashboardParamsValidator
 export class DeleteDashboardParamsValidator
   extends IDValidator
   implements TDeleteDashboardByIdRequestParams {}
+
+export class DeleteDashboardBatchBodyValidator extends IDsValidator {}
 
 export class UpdateDashboardValidator
   extends UpdateValidator
