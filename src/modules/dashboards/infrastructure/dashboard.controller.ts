@@ -16,6 +16,7 @@ import SuccessResponse from '@/core/base/frameworks/shared/responses/success.res
 import {
   CreateDashboardSerializer,
   DeleteDashboardSerializer,
+  GetDashboardSerializer,
   ListDashboardSerializer,
   UpdateDashboardSerializer,
 } from '@/modules/dashboards/domain/entities/dashboard.serializer';
@@ -25,6 +26,7 @@ import {
   DeleteDashboardBatchBodyValidator,
   DeleteDashboardParamsValidator,
   FilterDashboardQueryValidator,
+  GetDashboardParamsValidator,
   ListDashboardQueryValidator,
   UpdateDashboardParamsValidator,
   UpdateDashboardValidator,
@@ -75,6 +77,17 @@ export class DashboardController {
     const result = await this.dashboardUseCase.create(body);
 
     return new SuccessResponse('dashboard created successfully', result);
+  }
+
+  @Get('/:id')
+  @HttpCode(HttpStatus.OK)
+  @Serializer(GetDashboardSerializer)
+  @Authentication(true)
+  @Authorization(Role.USER)
+  public async get(@Param() params: GetDashboardParamsValidator) {
+    const result = await this.dashboardUseCase.get(params);
+
+    return new SuccessResponse('dashboard fetched successfully', result);
   }
 
   @Patch('/:id')

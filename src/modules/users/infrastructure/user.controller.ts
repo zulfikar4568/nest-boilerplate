@@ -17,6 +17,7 @@ import SuccessResponse from '@/core/base/frameworks/shared/responses/success.res
 import {
   CreateUserSerializer,
   DeleteUserSerializer,
+  GetUserSerializer,
   ListUserSerializer,
   UpdateUserSerializer,
 } from '@/modules/Users/domain/entities/User.serializer';
@@ -26,6 +27,7 @@ import {
   DeleteUserBatchBodyValidator,
   DeleteUserParamsValidator,
   FilterUserQueryValidator,
+  GetUserParamsValidator,
   ListUserQueryValidator,
   UpdateUserParamsValidator,
   UpdateUserValidator,
@@ -77,6 +79,17 @@ export class UserController {
     const result = await this._usecase.create(body);
 
     return new SuccessResponse('user created successfully', result);
+  }
+
+  @Get('/:id')
+  @HttpCode(HttpStatus.OK)
+  @Serializer(GetUserSerializer)
+  @Authentication(true)
+  @Authorization(Role.USER)
+  public async get(@Param() params: GetUserParamsValidator) {
+    const result = await this._usecase.get(params);
+
+    return new SuccessResponse('user fetched successfully', result);
   }
 
   @Patch('/:id')

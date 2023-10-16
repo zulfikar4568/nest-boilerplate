@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Launch Server",
       "args": [
-        "${workspaceFolder}/src/main.ts"
+        "${workspaceFolder}/src/server.ts"
       ],
       "runtimeArgs": [
         "--nolazy",
@@ -20,7 +20,7 @@
       ],
       "sourceMaps": true,
       "cwd": "${workspaceRoot}",
-      "console": "integratedTerminal",
-    }
+      "console": "integratedTerminal"
+    },
   ]
 }

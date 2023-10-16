@@ -15,6 +15,7 @@ import { Expose, Type } from 'class-transformer';
 import {
   TCreateUserRequestBody,
   TDeleteUserByIdRequestParams,
+  TGetUserByIdRequestParams,
   TListUserRequestQuery,
   TUpdateUserByIdRequestParams,
   TUpdateUserRequestBody,
@@ -134,6 +135,10 @@ export class CreateUserValidator
 export class UpdateUserParamsValidator
   extends IDValidator
   implements TUpdateUserByIdRequestParams {}
+
+export class GetUserParamsValidator
+  extends IDValidator
+  implements TGetUserByIdRequestParams {}
 
 export class DeleteUserParamsValidator
   extends IDValidator

@@ -5,6 +5,7 @@ import { Type } from 'class-transformer';
 import {
   TCreateDashboardRequestBody,
   TDeleteDashboardByIdRequestParams,
+  TGetDashboardByIdRequestParams,
   TListDashboardRequestQuery,
   TUpdateDashboardByIdRequestParams,
   TUpdateDashboardRequestBody,
@@ -46,6 +47,10 @@ export class FilterDashboardQueryValidator
 export class CreateDashboardValidator
   extends CreateValidator
   implements TCreateDashboardRequestBody {}
+
+export class GetDashboardParamsValidator
+  extends IDValidator
+  implements TGetDashboardByIdRequestParams {}
 
 export class UpdateDashboardParamsValidator
   extends IDValidator

@@ -22,3 +22,4 @@ export class CreateDashboardSerializer implements Dashboard {
 
 export class UpdateDashboardSerializer extends CreateDashboardSerializer {}
 export class DeleteDashboardSerializer extends CreateDashboardSerializer {}
+export class GetDashboardSerializer extends CreateDashboardSerializer {}
