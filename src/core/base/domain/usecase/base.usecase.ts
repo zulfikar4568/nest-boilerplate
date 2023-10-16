@@ -56,6 +56,27 @@ export abstract class BaseUseCase<T extends Record<string, any>, C, U> {
     }
   }
 
+  @Span('usecase get')
+  async get(params: { id: string }): Promise<T> {
+    try {
+      const data = await this.db.$transaction(async (tx) => {
+        return await this.repository.get(params.id, tx);
+      });
+
+      return data;
+    } catch (error: any) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        log.error(error.message);
+        throw new UnknownException({
+          code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
+          message: `Error tidak terduga ketika mengambil informasi!`,
+          params: { exception: error.message },
+        });
+      }
+      throw error;
+    }
+  }
+
   @Span('usecase update')
   async update(params: { id: string }, body: U): Promise<T> {
     try {
