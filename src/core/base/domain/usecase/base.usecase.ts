@@ -38,11 +38,11 @@ export abstract class BaseUseCase<T extends Record<string, any>, C, U> {
   @Span('usecase create')
   async create(body: C): Promise<T> {
     try {
-      const dashboard = await this.db.$transaction(async (tx) => {
+      const data = await this.db.$transaction(async (tx) => {
         return await this.repository.create(body, tx);
       });
 
-      return dashboard;
+      return data;
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {
         log.error(error.message);
@@ -80,11 +80,11 @@ export abstract class BaseUseCase<T extends Record<string, any>, C, U> {
   @Span('usecase update')
   async update(params: { id: string }, body: U): Promise<T> {
     try {
-      const dashboard = await this.db.$transaction(async (tx) => {
+      const data = await this.db.$transaction(async (tx) => {
         return await this.repository.update(params.id, body, tx);
       });
 
-      return dashboard;
+      return data;
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {
         log.error(error.message);
