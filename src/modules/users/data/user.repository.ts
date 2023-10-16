@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import {
   TCreateUser,
   TUpdateUserRequestBody,
@@ -13,8 +15,8 @@ export class UserRepository extends BaseRepository<
   TCreateUser,
   TUpdateUserRequestBody
 > {
-  constructor() {
-    super(User);
+  constructor(@Inject(CACHE_MANAGER) cacheManager: Cache) {
+    super(User, cacheManager);
   }
 
   async getByUsername(username: string, tx: TPrismaTx): Promise<User | null> {

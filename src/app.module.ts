@@ -2,11 +2,15 @@ import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { OpenTelemetryModule } from 'nestjs-otel';
 import { LoggerModule } from 'nestjs-pino';
+import { CacheModule } from '@nestjs/cache-manager';
+import { RedisClientOptions } from '@redis/client';
+import { redisStore } from 'cache-manager-redis-yet';
 import HealthModule from './core/base/frameworks/health/health.module';
 import AuthModule from './core/base/frameworks/auth/auth.module';
 import { InstrumentMiddleware } from './core/base/frameworks/shared/middlewares/instrument.middleware';
 import { logger } from './core/base/frameworks/shared/utils/log.util';
 import { RegistrationModule } from './modules/registration.module';
+import appConfig from './config/app.config';
 
 const OpenTelemetryModuleConfig = OpenTelemetryModule.forRoot({
   metrics: {
@@ -43,6 +47,12 @@ const PinoLoggerModule = LoggerModule.forRoot({
     PinoLoggerModule,
     HealthModule,
     AuthModule,
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore,
+      isGlobal: true,
+      ttl: appConfig.REDIS_TTL,
+      url: appConfig.REDIS_URL,
+    }),
 
     //bussines
     RegistrationModule,

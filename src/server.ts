@@ -16,6 +16,7 @@ import otelSDK from './tracing';
 import UnknownExceptionsFilter from '@/core/base/frameworks/shared/filters/unknown.filter';
 
 const printConfig = () => {
+  log.info(`Connected to Redis: ${appConfig.REDIS_URL}`);
   log.info(`Connected to Grafana Loki: ${appConfig.LOKI_HOST}`);
   log.info(`Connected to Grafana Tempo: ${appConfig.OTLP_URL}`);
   log.info(

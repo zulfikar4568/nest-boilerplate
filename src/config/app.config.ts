@@ -9,6 +9,8 @@ export default Object.freeze({
   COOKIE_SECURE: env.get('COOKIE_SECURE').default('true').asBoolStrict(),
   COOKIE_HTTP_ONLY: env.get('COOKIE_HTTP_ONLY').default('true').asBoolStrict(),
   OTLP_URL: env.get('OTLP_URL').asString(),
+  REDIS_URL: env.get('REDIS_URL').asString(),
+  REDIS_TTL: env.get('REDIS_TTL').default(300).asInt(),
   LOKI_HOST: env.get('LOKI_HOST').asString(),
   LOKI_USERNAME: env.get('LOKI_USERNAME').default('').asString(),
   LOKI_PASSWORD: env.get('LOKI_PASSWORD').default('').asString(),

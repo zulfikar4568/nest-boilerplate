@@ -1,5 +1,7 @@
 import { Prisma } from '@prisma/client';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import {
   Session,
   TCreateSessionRequestBody,
@@ -15,8 +17,8 @@ export class SessionRepository extends BaseRepository<
   TCreateSessionRequestBody,
   TUpdateSessionRequestBody
 > {
-  constructor() {
-    super(Session);
+  constructor(@Inject(CACHE_MANAGER) cacheManager: Cache) {
+    super(Session, cacheManager);
   }
 
   async deleteByUserId(userId: string, tx: TPrismaTx): Promise<void> {

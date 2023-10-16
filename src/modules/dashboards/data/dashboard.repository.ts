@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import {
   Dashboard,
   TCreateDashboardRequestBody,
@@ -12,7 +14,7 @@ export class DashboardRepository extends BaseRepository<
   TCreateDashboardRequestBody,
   TUpdateDashboardRequestBody
 > {
-  constructor() {
-    super(Dashboard);
+  constructor(@Inject(CACHE_MANAGER) cacheManager: Cache) {
+    super(Dashboard, cacheManager);
   }
 }

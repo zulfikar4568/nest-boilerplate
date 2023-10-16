@@ -1,3 +1,4 @@
+import { Cache } from 'cache-manager';
 import { NotFoundException } from '../../frameworks/shared/exceptions/common.exception';
 import { TPrismaTx } from '../../domain/entities';
 
@@ -6,19 +7,27 @@ export class GetRepository {
     id: string,
     tx: TPrismaTx,
     entity: string,
+    cacheManager: Cache,
   ): Promise<T> {
-    const data = await tx[entity].findUnique({
-      where: {
-        id,
-      },
-    });
+    const value = await cacheManager.get(id);
 
-    if (!data) {
-      throw new NotFoundException({
-        message: `${entity} dengan id ${id} tidak ditemukan!`,
+    if (!value) {
+      const data = await tx[entity].findUnique({
+        where: {
+          id,
+        },
       });
+
+      if (!data) {
+        throw new NotFoundException({
+          message: `${entity} dengan id ${id} tidak ditemukan!`,
+        });
+      }
+
+      await cacheManager.set(id, data);
+      return data;
     }
 
-    return data;
+    return value as T;
   }
 }
