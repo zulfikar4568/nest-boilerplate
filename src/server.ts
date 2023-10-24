@@ -1,3 +1,8 @@
+// Start the Open telemetry
+import otelSDK from './tracing';
+otelSDK.start();
+
+// Start the application
 import { NestFactory } from '@nestjs/core';
 import { VersioningType } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
@@ -12,7 +17,6 @@ import HttpExceptionFilter from './core/base/frameworks/shared/filters/http.filt
 import ContextInterceptor from './core/base/frameworks/shared/interceptors/context.interceptor';
 import log from './core/base/frameworks/shared/utils/log.util';
 import ValidationPipe from './core/base/frameworks/shared/pipes/validation.pipe';
-import otelSDK from './tracing';
 import UnknownExceptionsFilter from '@/core/base/frameworks/shared/filters/unknown.filter';
 
 const printConfig = () => {
@@ -98,6 +102,5 @@ const httpServer = new Promise(async (resolve, reject) => {
 });
 
 (async function () {
-  otelSDK.start();
   await Promise.all([httpServer]);
 })();

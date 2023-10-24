@@ -16,6 +16,12 @@ import { PrismaInstrumentation } from '@prisma/instrumentation';
 import { PinoInstrumentation } from '@opentelemetry/instrumentation-pino';
 import appConfig from './config/app.config';
 
+/**
+ * ENABLE THIS FOR DEBUGGING
+ */
+// import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
+// diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
+
 const otelSDK = new NodeSDK({
   serviceName: appConfig.APP_NAME,
   metricReader: new PrometheusExporter({
