@@ -8,5 +8,5 @@ export class User extends BaseEntity implements TUser {
   password: string;
   roles: Role[];
 }
-export type TCompactUser = Omit<User, 'createdAt' | 'updatedAt'>;
+export type TCompactUser = Omit<User, 'createdAt' | 'updatedAt' | 'password'>;
 export type OptionalUser = Partial<User>;

@@ -23,4 +23,4 @@ export type TCreateUser = Omit<User, 'id' | 'createdAt' | 'updatedAt'>;
 export type TCreateUserRequestBody = TCreateUser & { confirmPassword: string };
 export type TUpdateUser = Partial<TCreateUser>;
 export type TUpdateUserRequestBody = Partial<TCreateUserRequestBody>;
-export type TCompactUser = Omit<User, 'createdAt' | 'updatedAt'>;
+export type TCompactUser = Omit<User, 'createdAt' | 'updatedAt' | 'password'>;

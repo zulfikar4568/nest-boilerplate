@@ -51,7 +51,6 @@ export class SessionUseCase extends BaseUseCase<
       description: user.description,
       email: user.email,
       name: user.name,
-      password: user.password,
       phoneNumber: user.phoneNumber,
       roles: user.roles,
       id: user.id,
