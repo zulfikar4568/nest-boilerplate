@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Dashboard } from '@prisma/client';
 import { Span } from 'nestjs-otel';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import PrismaService from '../../../../core/base/frameworks/data-services/prisma/prisma.service';
@@ -28,7 +27,7 @@ import {
 
 @Injectable()
 export class UserUseCase extends BaseUseCase<
-  Dashboard,
+  User,
   TCreateUser,
   TUpdateUserRequestBody
 > {
