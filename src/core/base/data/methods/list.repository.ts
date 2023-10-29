@@ -83,7 +83,6 @@ export class ListRepository {
     total: number;
     data: T[];
   }> {
-    console.log(findArgs);
     const total = await tx[entity].count(totalArgs);
     const data = await tx[entity].findMany(findArgs);
 
