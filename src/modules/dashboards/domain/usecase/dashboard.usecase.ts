@@ -1,19 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Dashboard } from '@prisma/client';
-import {
-  TCreateDashboardRequestBody,
-  TUpdateDashboardRequestBody,
-} from '../entities/dashboard.entity';
 import { DashboardRepository } from '../../data/dashboard.repository';
 import PrismaService from '@/core/base/frameworks/data-services/prisma/prisma.service';
 import { BaseUseCase } from '@/core/base/domain/usecase/base.usecase';
+import { Dashboard } from '../entities/dashboard.entity';
 
 @Injectable()
-export class DashboardUseCase extends BaseUseCase<
-  Dashboard,
-  TCreateDashboardRequestBody,
-  TUpdateDashboardRequestBody
-> {
+export class DashboardUseCase extends BaseUseCase<Dashboard> {
   constructor(repository: DashboardRepository, db: PrismaService) {
     super(repository, db);
   }

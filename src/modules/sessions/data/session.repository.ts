@@ -4,7 +4,6 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import {
   Session,
-  TCreateSessionRequestBody,
   TUpdateSessionRequestBody,
 } from '../domain/entities/session.entity';
 import { BaseRepository } from '@/core/base/data/base.repository';
@@ -12,11 +11,7 @@ import { TPrismaTx } from '@/core/base/domain/entities';
 import { InvalidRefreshToken } from '@/core/base/frameworks/shared/exceptions/session.exception';
 
 @Injectable()
-export class SessionRepository extends BaseRepository<
-  Session,
-  TCreateSessionRequestBody,
-  TUpdateSessionRequestBody
-> {
+export class SessionRepository extends BaseRepository<Session> {
   constructor(@Inject(CACHE_MANAGER) cacheManager: Cache) {
     super(Session, cacheManager);
   }

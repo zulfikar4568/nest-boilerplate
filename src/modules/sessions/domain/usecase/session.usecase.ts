@@ -4,12 +4,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import dayjs from 'dayjs';
 import { instanceToPlain } from 'class-transformer';
 import { SessionRepository } from '../../data/session.repository';
-import {
-  Session,
-  TCreateSessionRequestBody,
-  TLoginSession,
-  TUpdateSessionRequestBody,
-} from '../entities/session.entity';
+import { Session, TLoginSession } from '../entities/session.entity';
 import PrismaService from '@/core/base/frameworks/data-services/prisma/prisma.service';
 import { BaseUseCase } from '@/core/base/domain/usecase/base.usecase';
 import { TCompactUser, User } from '@/core/base/domain/entities/auth.entity';
@@ -31,11 +26,7 @@ import { checkPassword } from '@/core/base/frameworks/shared/utils/password.util
 import { UserRepository } from '@/modules/users/data/user.repository';
 
 @Injectable()
-export class SessionUseCase extends BaseUseCase<
-  Session,
-  TCreateSessionRequestBody,
-  TUpdateSessionRequestBody
-> {
+export class SessionUseCase extends BaseUseCase<Session> {
   constructor(
     private readonly sessionRepository: SessionRepository,
     private readonly userRepository: UserRepository,

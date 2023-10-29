@@ -21,6 +21,8 @@ export class ListRepository {
     ctx: IContext,
     tx: TPrismaTx,
     entity: string,
+    include?: Record<string, any>,
+    where?: Record<string, any>,
   ): Promise<IListResult<T>> {
     const query = ctx.params.query as any;
 
@@ -28,7 +30,10 @@ export class ListRepository {
 
     const selectOptions = {
       orderBy: order,
-      where: query.filters.field,
+      where: {
+        ...query.filters.field,
+        ...where,
+      },
     };
 
     let pageOptions = {
@@ -49,8 +54,8 @@ export class ListRepository {
     }
 
     const queryData = await ListRepository.queryData<T>(
-      { ...pageOptions, ...selectOptions },
       selectOptions,
+      { ...selectOptions, ...{ include }, ...pageOptions },
       tx,
       entity,
     );
@@ -78,6 +83,7 @@ export class ListRepository {
     total: number;
     data: T[];
   }> {
+    console.log(findArgs);
     const total = await tx[entity].count(totalArgs);
     const data = await tx[entity].findMany(findArgs);
 

@@ -9,11 +9,14 @@ export class DeleteRepository {
     tx: TPrismaTx,
     entity: string,
     cacheManager: Cache,
+    include?: Record<string, any>,
+    where?: Record<string, any>,
   ): Promise<T> {
     await GetRepository.get(id, tx, entity, cacheManager);
 
     const data = await tx[entity].delete({
-      where: { id },
+      where: { id, ...where },
+      include,
     });
 
     if (data) {
@@ -28,12 +31,14 @@ export class DeleteRepository {
     tx: TPrismaTx,
     entity: string,
     cacheManager: Cache,
+    where?: Record<string, any>,
   ): Promise<Prisma.BatchPayload> {
     const deleted = await tx[entity].deleteMany({
       where: {
         id: {
           in: ids,
         },
+        ...where,
       },
     });
 

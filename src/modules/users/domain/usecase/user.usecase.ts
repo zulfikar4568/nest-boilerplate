@@ -6,7 +6,6 @@ import { BaseUseCase } from '../../../../core/base/domain/usecase/base.usecase';
 import { UserRepository } from '../../data/user.repository';
 import {
   TCompactUser,
-  TCreateUser,
   TCreateUserRequestBody,
   TDeleteUserByIdRequestParams,
   TUpdateUserByIdRequestParams,
@@ -26,11 +25,7 @@ import {
 } from '@/core/base/frameworks/shared/exceptions/common.exception';
 
 @Injectable()
-export class UserUseCase extends BaseUseCase<
-  User,
-  TCreateUser,
-  TUpdateUserRequestBody
-> {
+export class UserUseCase extends BaseUseCase<User> {
   constructor(
     protected repository: UserRepository,
     db: PrismaService,
