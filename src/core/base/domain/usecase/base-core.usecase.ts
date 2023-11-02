@@ -10,17 +10,27 @@ import { IListResult } from '../entities';
 import PrismaService from '../../frameworks/data-services/prisma/prisma.service';
 import { BaseCoreRepository } from '../../data/base-core.repository';
 
-export abstract class BaseCoreUseCase<T extends Record<string, any>> {
+export abstract class BaseCoreUseCase<
+  Entity extends Record<string, any>,
+  Include extends Record<string, any>,
+  Select extends Record<string, any>,
+  Where extends Record<string, any>,
+> {
   constructor(
-    protected readonly repository: BaseCoreRepository<T>,
+    protected readonly repository: BaseCoreRepository<
+      Entity,
+      Include,
+      Select,
+      Where
+    >,
     protected db: PrismaService,
   ) {}
 
   @Span('usecase create')
-  async create(body: any): Promise<T> {
+  async create(body: any, include?: Include): Promise<Entity> {
     try {
       const data = await this.db.$transaction(async (tx) => {
-        return await this.repository.create(body, tx);
+        return await this.repository.create(body, tx, include);
       });
 
       return data;
@@ -29,7 +39,7 @@ export abstract class BaseCoreUseCase<T extends Record<string, any>> {
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `something wrong when trying to create!`,
+          message: `Error tidak terduga ketika ketika membuat!`,
           params: { exception: error.message },
         });
       }
@@ -38,10 +48,14 @@ export abstract class BaseCoreUseCase<T extends Record<string, any>> {
   }
 
   @Span('usecase get')
-  async get(params: { id: string }): Promise<T> {
+  async get(
+    params: { id: string },
+    include?: Include,
+    where?: Where,
+  ): Promise<Entity> {
     try {
       const data = await this.db.$transaction(async (tx) => {
-        return await this.repository.get(params.id, tx);
+        return await this.repository.get(params.id, tx, include, where);
       });
 
       return data;
@@ -50,7 +64,7 @@ export abstract class BaseCoreUseCase<T extends Record<string, any>> {
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `something wrong when trying to get information!`,
+          message: `Error tidak terduga ketika mengambil informasi!`,
           params: { exception: error.message },
         });
       }
@@ -59,7 +73,7 @@ export abstract class BaseCoreUseCase<T extends Record<string, any>> {
   }
 
   @Span('usecase update')
-  async update(params: { id: string }, body: any): Promise<T> {
+  async update(params: { id: string }, body: any): Promise<Entity> {
     try {
       const data = await this.db.$transaction(async (tx) => {
         return await this.repository.update(params.id, body, tx);
@@ -71,7 +85,7 @@ export abstract class BaseCoreUseCase<T extends Record<string, any>> {
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `something wrong when trying to update!`,
+          message: `Error tidak terduga ketika mengubah!`,
           params: { exception: error.message },
         });
       }
@@ -90,7 +104,7 @@ export abstract class BaseCoreUseCase<T extends Record<string, any>> {
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `something wrong when trying to batch deletion!`,
+          message: `Error tidak terduga ketika menghapus secara batch!`,
           params: { exception: error.message },
         });
       }
@@ -99,18 +113,22 @@ export abstract class BaseCoreUseCase<T extends Record<string, any>> {
   }
 
   @Span('usecase delete')
-  async delete(params: { id: string }): Promise<T> {
+  async delete(
+    params: { id: string },
+    include?: Include,
+    where?: Where,
+  ): Promise<Entity> {
     try {
       return await this.db.$transaction(async (tx) => {
         await this.repository.get(params.id, tx);
-        return await this.repository.delete(params.id, tx);
+        return await this.repository.delete(params.id, tx, include, where);
       });
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `something wrong when trying to delete!`,
+          message: `Error tidak terduga ketika menghapus!`,
           params: { exception: error.message },
         });
       }
@@ -119,17 +137,21 @@ export abstract class BaseCoreUseCase<T extends Record<string, any>> {
   }
 
   @Span('usecase list')
-  async list(ctx: IContext): Promise<IListResult<T>> {
+  async list(
+    ctx: IContext,
+    include?: Include,
+    where?: Where,
+  ): Promise<IListResult<Entity>> {
     try {
       return await this.db.$transaction(async (tx) => {
-        return this.repository.list(ctx, tx);
+        return this.repository.list(ctx, tx, include, where);
       });
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `something wrong when trying to get the list!`,
+          message: `Error tidak terduga ketika mengambil list!`,
           params: { exception: error.message },
         });
       }

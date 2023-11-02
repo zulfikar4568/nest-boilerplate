@@ -3,27 +3,31 @@ import { parseQueryCursor } from '../../frameworks/shared/utils/query-cursor.uti
 import { IListResult, TPrismaTx } from '../../domain/entities';
 
 export class ListRepository {
-  static async listDropDown<T extends Record<string, any>>(
+  static async listDropDown<Entity extends Record<string, any>>(
     tx: TPrismaTx,
     entity: string,
-  ): Promise<Pick<T, 'id' | 'name'>[]> {
+  ): Promise<Pick<Entity, 'id' | 'name'>[]> {
     const data = await tx[entity].findMany({
       select: {
         id: true,
-        name: true,
+        nama: true,
       },
     });
 
     return data;
   }
 
-  static async list<T extends Record<string, any>>(
+  static async list<
+    Entity extends Record<string, any>,
+    Include extends Record<string, any>,
+    Where extends Record<string, any>,
+  >(
     ctx: IContext,
     tx: TPrismaTx,
     entity: string,
-    include?: Record<string, any>,
-    where?: Record<string, any>,
-  ): Promise<IListResult<T>> {
+    include?: Include,
+    where?: Where,
+  ): Promise<IListResult<Entity>> {
     const query = ctx.params.query as any;
 
     const { limit, order, cursor } = parseQueryCursor<any>(query);
@@ -53,7 +57,7 @@ export class ListRepository {
       };
     }
 
-    const queryData = await ListRepository.queryData<T>(
+    const queryData = await ListRepository.queryData<Entity>(
       selectOptions,
       { ...selectOptions, ...{ include }, ...pageOptions },
       tx,
@@ -74,14 +78,14 @@ export class ListRepository {
     };
   }
 
-  private static async queryData<T extends Record<string, any>>(
+  private static async queryData<Entity extends Record<string, any>>(
     totalArgs: any,
     findArgs: any,
     tx: TPrismaTx,
     entity: string,
   ): Promise<{
     total: number;
-    data: T[];
+    data: Entity[];
   }> {
     const total = await tx[entity].count(totalArgs);
     const data = await tx[entity].findMany(findArgs);

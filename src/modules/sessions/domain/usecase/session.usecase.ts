@@ -24,9 +24,15 @@ import {
 import { generateJwt } from '@/core/base/frameworks/shared/utils/jwt.util';
 import { checkPassword } from '@/core/base/frameworks/shared/utils/password.util';
 import { UserRepository } from '@/modules/users/data/user.repository';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class SessionUseCase extends BaseUseCase<Session> {
+export class SessionUseCase extends BaseUseCase<
+  Session,
+  Prisma.SessionInclude,
+  Prisma.SessionSelect,
+  Prisma.UserWhereInput | Prisma.UserWhereUniqueInput
+> {
   constructor(
     private readonly sessionRepository: SessionRepository,
     private readonly userRepository: UserRepository,

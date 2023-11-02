@@ -10,111 +10,127 @@ import {
   UpdateRepository,
 } from './methods';
 
-export abstract class BaseCoreRepository<T extends Record<string, any>> {
+export abstract class BaseCoreRepository<
+  Entity extends Record<string, any>,
+  Include extends Record<string, any>,
+  Select extends Record<string, any>,
+  Where extends Record<string, any>,
+> {
   protected _entity: string;
   protected cacheManager: Cache;
 
-  constructor(entity: new () => T, cacheManager: Cache) {
+  public defaultInclude: Include;
+  public defaultSelect: Select;
+  public defaultWhere: Where;
+
+  constructor(entity: new () => Entity, cacheManager: Cache) {
     this._entity = camelize(entity.name);
     this.cacheManager = cacheManager;
   }
 
-  async create(
-    body: any,
-    tx: TPrismaTx,
-    include?: Record<string, any>,
-  ): Promise<T> {
-    return CreateRepository.create<T>(
+  async create(body: any, tx: TPrismaTx, include?: Include): Promise<Entity> {
+    return CreateRepository.create<Entity, Include>(
       body,
       tx,
       this._entity,
       this.cacheManager,
-      include,
+      include ? include : this.defaultInclude,
     );
   }
 
-  async createMany(body: any, tx: TPrismaTx): Promise<T[]> {
-    return CreateRepository.createMany<T>(body, tx, this._entity);
+  async createMany(body: any, tx: TPrismaTx): Promise<Entity[]> {
+    return CreateRepository.createMany<Entity>(body, tx, this._entity);
   }
 
   async update(
     id: string,
     body: any,
     tx: TPrismaTx,
-    include?: Record<string, any>,
-    where?: Record<string, any>,
-  ): Promise<T> {
-    return UpdateRepository.update<T>(
+    include?: Include,
+    where?: Where,
+  ): Promise<Entity> {
+    return UpdateRepository.update<Entity, Include, Where>(
       id,
       body,
       tx,
       this._entity,
       this.cacheManager,
-      include,
-      where,
+      include ? include : this.defaultInclude,
+      where ? where : this.defaultWhere,
     );
   }
 
   async delete(
     id: string,
     tx: TPrismaTx,
-    include?: Record<string, any>,
-    where?: Record<string, any>,
-  ): Promise<T> {
-    return DeleteRepository.delete<T>(
+    include?: Include,
+    where?: Where,
+  ): Promise<Entity> {
+    return DeleteRepository.delete<Entity, Include, Where>(
       id,
       tx,
       this._entity,
       this.cacheManager,
-      include,
-      where,
+      include ? include : this.defaultInclude,
+      where ? where : this.defaultWhere,
     );
   }
 
   async deleteBatch(
     ids: string[],
     tx: TPrismaTx,
-    where?: Record<string, any>,
+    where?: Where,
   ): Promise<{ count: number }> {
     return DeleteRepository.deleteBatch(
       ids,
       tx,
       this._entity,
       this.cacheManager,
-      where,
+      where ? where : this.defaultWhere,
     );
   }
 
   async get(
     id: string,
     tx: TPrismaTx,
-    include?: Record<string, any>,
-    where?: Record<string, any>,
-  ): Promise<T> {
-    return GetRepository.get<T>(
+    include?: Include,
+    where?: Where,
+  ): Promise<Entity> {
+    return GetRepository.get<Entity, Include, Where>(
       id,
       tx,
       this._entity,
       this.cacheManager,
-      include,
-      where,
+      include ? include : this.defaultInclude,
+      where ? where : this.defaultWhere,
     );
   }
 
   async getMany(
     tx: TPrismaTx,
-    select?: Record<string, any>,
-    where?: Record<string, any>,
-  ): Promise<T[]> {
-    return GetRepository.getMany<T>(tx, this._entity, select, where);
+    select?: Select,
+    where?: Where,
+  ): Promise<Entity[]> {
+    return GetRepository.getMany<Entity, Select, Where>(
+      tx,
+      this._entity,
+      select ? select : this.defaultSelect,
+      where,
+    );
   }
 
   async list(
     ctx: IContext,
     tx: TPrismaTx,
-    include?: Record<string, any>,
-    where?: Record<string, any>,
-  ): Promise<IListResult<T>> {
-    return ListRepository.list<T>(ctx, tx, this._entity, include, where);
+    include?: Include,
+    where?: Where,
+  ): Promise<IListResult<Entity>> {
+    return ListRepository.list<Entity, Include, Where>(
+      ctx,
+      tx,
+      this._entity,
+      include ? include : this.defaultInclude,
+      where ? where : this.defaultWhere,
+    );
   }
 }

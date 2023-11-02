@@ -11,7 +11,12 @@ import { TPrismaTx } from '@/core/base/domain/entities';
 import { InvalidRefreshToken } from '@/core/base/frameworks/shared/exceptions/session.exception';
 
 @Injectable()
-export class SessionRepository extends BaseRepository<Session> {
+export class SessionRepository extends BaseRepository<
+  Session,
+  Prisma.SessionInclude,
+  Prisma.SessionSelect,
+  Prisma.UserWhereInput | Prisma.UserWhereUniqueInput
+> {
   constructor(@Inject(CACHE_MANAGER) cacheManager: Cache) {
     super(Session, cacheManager);
   }

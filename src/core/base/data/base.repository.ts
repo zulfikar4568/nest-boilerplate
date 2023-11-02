@@ -4,13 +4,16 @@ import { ListRepository } from './methods';
 import { BaseCoreRepository } from './base-core.repository';
 
 export abstract class BaseRepository<
-  T extends Record<string, any>,
-> extends BaseCoreRepository<T> {
-  constructor(entity: new () => T, cacheManager: Cache) {
+  Entity extends Record<string, any>,
+  Include extends Record<string, any>,
+  Select extends Record<string, any>,
+  Where extends Record<string, any>,
+> extends BaseCoreRepository<Entity, Include, Select, Where> {
+  constructor(entity: new () => Entity, cacheManager: Cache) {
     super(entity, cacheManager);
   }
 
-  async listDropdown(tx: TPrismaTx): Promise<Pick<T, 'id' | 'name'>[]> {
-    return ListRepository.listDropDown<T>(tx, this._entity);
+  async listDropdown(tx: TPrismaTx): Promise<Pick<Entity, 'id' | 'name'>[]> {
+    return ListRepository.listDropDown<Entity>(tx, this._entity);
   }
 }

@@ -3,15 +3,19 @@ import { TPrismaTx } from '../../domain/entities';
 import { GetRepository } from './get.repository';
 
 export class UpdateRepository {
-  static async update<T extends Record<string, any>>(
+  static async update<
+    Entity extends Record<string, any>,
+    Include extends Record<string, any>,
+    Where extends Record<string, any>,
+  >(
     id: string,
     body: any,
     tx: TPrismaTx,
     entity: string,
     cacheManager: Cache,
-    include?: Record<string, any>,
-    where?: Record<string, any>,
-  ): Promise<T> {
+    include?: Include,
+    where?: Where,
+  ): Promise<Entity> {
     await GetRepository.get(id, tx, entity, cacheManager);
 
     const data = await tx[entity].update({

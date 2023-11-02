@@ -2,13 +2,16 @@ import { Cache } from 'cache-manager';
 import { TPrismaTx } from '../../domain/entities';
 
 export class CreateRepository {
-  static async create<T extends Record<string, any>>(
+  static async create<
+    Entity extends Record<string, any>,
+    Include extends Record<string, any>,
+  >(
     body: any,
     tx: TPrismaTx,
     entity: string,
     cacheManager: Cache,
-    include?: Record<string, any>,
-  ): Promise<T> {
+    include?: Include,
+  ): Promise<Entity> {
     const data = await tx[entity].create({
       data: body,
       include,
@@ -21,11 +24,11 @@ export class CreateRepository {
     return data;
   }
 
-  static async createMany<T extends Record<string, any>>(
+  static async createMany<Entity extends Record<string, any>>(
     body: any,
     tx: TPrismaTx,
     entity: string,
-  ): Promise<T[]> {
+  ): Promise<Entity[]> {
     const data = await tx[entity].createMany({
       data: body,
     });

@@ -4,9 +4,15 @@ import { Cache } from 'cache-manager';
 import { User } from '../domain/entities/user.entity';
 import { BaseRepository } from '@/core/base/data/base.repository';
 import { TPrismaTx } from '@/core/base/domain/entities';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class UserRepository extends BaseRepository<User> {
+export class UserRepository extends BaseRepository<
+  User,
+  Prisma.UserInclude,
+  Prisma.UserSelect,
+  Prisma.UserWhereInput | Prisma.UserWhereUniqueInput
+> {
   constructor(@Inject(CACHE_MANAGER) cacheManager: Cache) {
     super(User, cacheManager);
   }

@@ -23,9 +23,15 @@ import {
   EErrorCommonCode,
   UnknownException,
 } from '@/core/base/frameworks/shared/exceptions/common.exception';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class UserUseCase extends BaseUseCase<User> {
+export class UserUseCase extends BaseUseCase<
+  User,
+  Prisma.UserInclude,
+  Prisma.UserSelect,
+  Prisma.UserWhereInput | Prisma.UserWhereUniqueInput
+> {
   constructor(
     protected repository: UserRepository,
     db: PrismaService,

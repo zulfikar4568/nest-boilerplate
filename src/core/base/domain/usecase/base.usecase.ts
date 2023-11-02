@@ -10,17 +10,25 @@ import PrismaService from '../../frameworks/data-services/prisma/prisma.service'
 import { BaseCoreUseCase } from './base-core.usecase';
 
 export abstract class BaseUseCase<
-  T extends Record<string, any>,
-> extends BaseCoreUseCase<T> {
+  Entity extends Record<string, any>,
+  Include extends Record<string, any>,
+  Select extends Record<string, any>,
+  Where extends Record<string, any>,
+> extends BaseCoreUseCase<Entity, Include, Select, Where> {
   constructor(
-    protected readonly repository: BaseRepository<T>,
+    protected readonly repository: BaseRepository<
+      Entity,
+      Include,
+      Select,
+      Where
+    >,
     protected db: PrismaService,
   ) {
     super(repository, db);
   }
 
   @Span('usecase list dropdown')
-  async listDropdown(): Promise<Pick<T, 'id' | 'name'>[]> {
+  async listDropdown(): Promise<Pick<Entity, 'id' | 'name'>[]> {
     try {
       return await this.db.$transaction(async (tx) => {
         return await this.repository.listDropdown(tx);

@@ -11,17 +11,6 @@ datasource db {
   url      = env("DB_URL")
 }
 
-model Dashboard {
-  id          String  @id @default(uuid()) @db.VarChar(36)
-  name        String  @unique @db.VarChar(50)
-  description String? @db.Text()
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("dashboards")
-}
-
 // Authentication
 model User {
   id          String  @id @default(uuid()) @db.VarChar(36)
