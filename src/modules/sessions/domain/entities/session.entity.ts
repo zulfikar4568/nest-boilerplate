@@ -1,5 +1,5 @@
 import { Session as TSession, Prisma } from '@prisma/client';
-import { IListRequestQuery } from '../../../../core/base/domain/entities/query-cursor.entity';
+import { IListRequestQuery } from '../../../../core/base/domain/entities/query.entity';
 import { User } from '@/core/base/domain/entities/auth.entity';
 
 export class Session implements TSession {
@@ -15,7 +15,8 @@ export class Session implements TSession {
 
 export type OptionalSession = Partial<Session>;
 export type RequiredSession = Required<Session>;
-export type TListSessionRequestQuery = IListRequestQuery<
+export type TListSessionRequestQuery<P> = IListRequestQuery<
+  P,
   Session,
   Prisma.SessionWhereInput
 >;

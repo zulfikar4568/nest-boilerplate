@@ -26,9 +26,11 @@ import {
   CreateUserValidator,
   DeleteUserBatchBodyValidator,
   DeleteUserParamsValidator,
-  FilterUserQueryValidator,
+  FilterCursorUserQueryValidator,
+  FilterPaginationUserQueryValidator,
   GetUserParamsValidator,
-  ListUserQueryValidator,
+  ListCursorUserQueryValidator,
+  ListPaginationUserQueryValidator,
   UpdateUserParamsValidator,
   UpdateUserValidator,
 } from '@/modules/Users/domain/entities/User.validator';
@@ -45,25 +47,38 @@ import User from '@/core/base/frameworks/shared/decorators/user.decorator';
 export class UserController {
   constructor(private _usecase: UserUseCase) {}
 
-  @Get('all')
+  @Get('dropdown')
   @HttpCode(HttpStatus.OK)
   @Authentication(true)
   @Authorization(Role.USER)
-  public async allSimple() {
+  public async listDropdown() {
     const result = await this._usecase.listDropdown();
 
     return new SuccessResponse('user fetched successfully', result);
   }
 
-  @Get('')
+  @Get('pagination')
   @HttpCode(HttpStatus.OK)
-  @UseList(FilterUserQueryValidator)
+  @UseList(FilterPaginationUserQueryValidator)
   @Serializer(ListUserSerializer)
-  @ApiFilterQuery('filters', ListUserQueryValidator)
+  @ApiFilterQuery('filters', ListPaginationUserQueryValidator)
   @Authentication(true)
   @Authorization(Role.USER)
-  public async lists(@Context() ctx: IContext) {
-    const { meta, result } = await this._usecase.list(ctx);
+  public async listPagination(@Context() ctx: IContext) {
+    const { result, meta } = await this._usecase.listPagination(ctx);
+
+    return new SuccessResponse('user fetched successfully', result, meta);
+  }
+
+  @Get('cursor')
+  @HttpCode(HttpStatus.OK)
+  @UseList(FilterCursorUserQueryValidator)
+  @Serializer(ListUserSerializer)
+  @ApiFilterQuery('filters', ListCursorUserQueryValidator)
+  @Authentication(true)
+  @Authorization(Role.USER)
+  public async listCursor(@Context() ctx: IContext) {
+    const { meta, result } = await this._usecase.listCursor(ctx);
 
     return new SuccessResponse('user fetched successfully', result, meta);
   }

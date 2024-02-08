@@ -1,6 +1,10 @@
 import { Cache } from 'cache-manager';
 import { IContext } from '../frameworks/shared/interceptors/context.interceptor';
-import { IListResult, TPrismaTx } from '../domain/entities';
+import {
+  IListCursorResult,
+  IListPaginationResult,
+  TPrismaTx,
+} from '../domain/entities';
 import { camelize } from '../frameworks/shared/utils/string.util';
 import { CreateRepository } from './methods/create.repository';
 import {
@@ -119,13 +123,28 @@ export abstract class BaseCoreRepository<
     );
   }
 
-  async list(
+  async listCursor(
     ctx: IContext,
     tx: TPrismaTx,
     include?: Include,
     where?: Where,
-  ): Promise<IListResult<Entity>> {
-    return ListRepository.list<Entity, Include, Where>(
+  ): Promise<IListCursorResult<Entity>> {
+    return ListRepository.listCursor<Entity, Include, Where>(
+      ctx,
+      tx,
+      this._entity,
+      include ? include : this.defaultInclude,
+      where ? where : this.defaultWhere,
+    );
+  }
+
+  async listPagination(
+    ctx: IContext,
+    tx: TPrismaTx,
+    include?: Include,
+    where?: Where,
+  ): Promise<IListPaginationResult<Entity>> {
+    return ListRepository.listPagination<Entity, Include, Where>(
       ctx,
       tx,
       this._entity,

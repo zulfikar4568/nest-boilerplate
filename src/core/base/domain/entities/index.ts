@@ -1,3 +1,3 @@
-export * from './query-cursor.entity';
+export * from './query.entity';
 export * from './prisma.entity';
 export * from './base.entity';

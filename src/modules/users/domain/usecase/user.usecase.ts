@@ -40,8 +40,9 @@ export class UserUseCase extends BaseUseCase<
   }
 
   /**
-   * This is overring method
+   * This is overriding method
    * @param {TCreateUserRequestBody} body
+   * @returns {Promise<User>}
    */
   @Span('usecase create user')
   async create(body: TCreateUserRequestBody): Promise<User> {
@@ -88,10 +89,10 @@ export class UserUseCase extends BaseUseCase<
   }
 
   /**
-   * This is overring method
+   * This is overriding method
    * @param {TUpdateUserByIdRequestParams} params
    * @param {TUpdateUserRequestBody} body
-   * @returns {User}
+   * @returns {Promise<User>}
    */
   @Span('usecase update user')
   async update(
@@ -127,6 +128,12 @@ export class UserUseCase extends BaseUseCase<
     }
   }
 
+  /**
+   * Delete with check current user, we cannot delete our self
+   * @param {TDeleteUserByIdRequestParams} params
+   * @param {TCompactUser} currentUser
+   * @returns {Promise<User>}
+   */
   @Span('usecase delete user')
   async deleteWithCurrentUserCheck(
     params: TDeleteUserByIdRequestParams,

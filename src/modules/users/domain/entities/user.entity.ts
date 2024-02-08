@@ -12,7 +12,8 @@ export class User extends BaseEntity implements TUser {
 
 export type OptionalUser = Partial<User>;
 export type RequiredUser = Required<User>;
-export type TListUserRequestQuery = IListRequestQuery<
+export type TListUserRequestQuery<P> = IListRequestQuery<
+  P,
   User,
   Prisma.UserWhereInput
 >;

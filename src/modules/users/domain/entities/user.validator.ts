@@ -21,7 +21,10 @@ import {
   TUpdateUserRequestBody,
 } from './user.entity';
 import {
-  BaseQueryValidator,
+  BaseCursorQueryValidator,
+  BasePaginationQueryValidator,
+  IListCursorRequest,
+  IListPaginationRequest,
   ListQueryField,
   StringFilterQuery,
 } from '@/core/base/domain/entities';
@@ -32,6 +35,7 @@ import {
   UpdateValidator,
 } from '@/core/base/domain/entities/validator.entity';
 
+// For field filter in list whether cursor or pagination
 export class ListUserQueryField
   extends ListQueryField
   implements Prisma.UserWhereInput
@@ -58,7 +62,8 @@ export class ListUserQueryField
   username?: string;
 }
 
-export class ListUserQueryValidator extends BaseQueryValidator<User> {
+// Create filters class for Cursor Type
+export class ListCursorUserQueryValidator extends BaseCursorQueryValidator<User> {
   @ValidateNested()
   @IsOptional()
   @IsObject()
@@ -67,12 +72,36 @@ export class ListUserQueryValidator extends BaseQueryValidator<User> {
   field?: ListUserQueryField;
 }
 
-export class FilterUserQueryValidator implements TListUserRequestQuery {
+// Create filters class for Pagination Type
+export class ListPaginationUserQueryValidator extends BasePaginationQueryValidator<User> {
   @ValidateNested()
   @IsOptional()
   @IsObject()
-  @Type(() => ListUserQueryValidator)
-  filters: ListUserQueryValidator;
+  @Type(() => ListUserQueryField)
+  @ApiPropertyOptional({ type: ListUserQueryField })
+  field?: ListUserQueryField;
+}
+
+// implement filter class for Cursor Type
+export class FilterCursorUserQueryValidator
+  implements TListUserRequestQuery<IListCursorRequest>
+{
+  @ValidateNested()
+  @IsOptional()
+  @IsObject()
+  @Type(() => ListCursorUserQueryValidator)
+  filters: ListCursorUserQueryValidator;
+}
+
+// implement filter class for Pagination Type
+export class FilterPaginationUserQueryValidator
+  implements TListUserRequestQuery<IListPaginationRequest>
+{
+  @ValidateNested()
+  @IsOptional()
+  @IsObject()
+  @Type(() => ListPaginationUserQueryValidator)
+  filters: ListPaginationUserQueryValidator;
 }
 
 export class CreateUserValidator

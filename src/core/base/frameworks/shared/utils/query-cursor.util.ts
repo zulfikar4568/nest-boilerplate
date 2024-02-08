@@ -1,7 +1,11 @@
-import { ESortMode, IListRequestQuery } from '../../../domain/entities';
+import {
+  ESortMode,
+  IListRequestQuery,
+  IListCursorRequest,
+} from '../../../domain/entities';
 
 export const parseQueryCursor = <T>(
-  query: T & IListRequestQuery,
+  query: T & IListRequestQuery<IListCursorRequest>,
 ): {
   limit: number;
   cursor: string | undefined;

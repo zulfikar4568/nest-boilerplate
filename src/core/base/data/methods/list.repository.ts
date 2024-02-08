@@ -1,6 +1,14 @@
 import { IContext } from '../../frameworks/shared/interceptors/context.interceptor';
 import { parseQueryCursor } from '../../frameworks/shared/utils/query-cursor.util';
-import { IListResult, TPrismaTx } from '../../domain/entities';
+import {
+  IListCursorResult,
+  IListPaginationResult,
+  TPrismaTx,
+} from '../../domain/entities';
+import {
+  parsePaginationMeta,
+  parsePaginationQuery,
+} from '../../frameworks/shared/utils/query-pagination.util';
 
 export class ListRepository {
   static async listDropDown<Entity extends Record<string, any>>(
@@ -17,7 +25,7 @@ export class ListRepository {
     return data;
   }
 
-  static async list<
+  static async listPagination<
     Entity extends Record<string, any>,
     Include extends Record<string, any>,
     Where extends Record<string, any>,
@@ -27,7 +35,55 @@ export class ListRepository {
     entity: string,
     include?: Include,
     where?: Where,
-  ): Promise<IListResult<Entity>> {
+  ): Promise<IListPaginationResult<Entity>> {
+    const query = ctx.params.query as any;
+
+    const { limit, offset, order, page } = parsePaginationQuery<any>(query);
+
+    const selectOptions = {
+      orderBy: order,
+      where: {
+        ...query.filters.field,
+        ...where,
+      },
+    };
+
+    const pageOptions = {
+      take: limit,
+      skip: offset,
+    };
+
+    const queryData = await ListRepository.queryData<Entity>(
+      selectOptions,
+      { ...selectOptions, ...{ include }, ...pageOptions },
+      tx,
+      entity,
+    );
+
+    const meta = parsePaginationMeta<Entity>({
+      result: queryData.data,
+      total: queryData.total,
+      page,
+      limit,
+    });
+
+    return {
+      result: queryData.data,
+      meta,
+    };
+  }
+
+  static async listCursor<
+    Entity extends Record<string, any>,
+    Include extends Record<string, any>,
+    Where extends Record<string, any>,
+  >(
+    ctx: IContext,
+    tx: TPrismaTx,
+    entity: string,
+    include?: Include,
+    where?: Where,
+  ): Promise<IListCursorResult<Entity>> {
     const query = ctx.params.query as any;
 
     const { limit, order, cursor } = parseQueryCursor<any>(query);

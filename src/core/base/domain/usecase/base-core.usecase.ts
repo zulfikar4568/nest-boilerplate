@@ -6,7 +6,7 @@ import {
   EErrorCommonCode,
   UnknownException,
 } from '../../frameworks/shared/exceptions/common.exception';
-import { IListResult } from '../entities';
+import { IListCursorResult, IListPaginationResult } from '../entities';
 import PrismaService from '../../frameworks/data-services/prisma/prisma.service';
 import { BaseCoreRepository } from '../../data/base-core.repository';
 
@@ -136,15 +136,38 @@ export abstract class BaseCoreUseCase<
     }
   }
 
-  @Span('usecase list')
-  async list(
+  @Span('usecase list pagination')
+  async listPagination(
     ctx: IContext,
     include?: Include,
     where?: Where,
-  ): Promise<IListResult<Entity>> {
+  ): Promise<IListPaginationResult<Entity>> {
     try {
       return await this.db.$transaction(async (tx) => {
-        return this.repository.list(ctx, tx, include, where);
+        return this.repository.listPagination(ctx, tx, include, where);
+      });
+    } catch (error: any) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        log.error(error.message);
+        throw new UnknownException({
+          code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
+          message: `Error tidak terduga ketika mengambil list!`,
+          params: { exception: error.message },
+        });
+      }
+      throw error;
+    }
+  }
+
+  @Span('usecase list cursor')
+  async listCursor(
+    ctx: IContext,
+    include?: Include,
+    where?: Where,
+  ): Promise<IListCursorResult<Entity>> {
+    try {
+      return await this.db.$transaction(async (tx) => {
+        return this.repository.listCursor(ctx, tx, include, where);
       });
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {
