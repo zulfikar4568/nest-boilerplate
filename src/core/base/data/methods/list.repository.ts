@@ -18,7 +18,7 @@ export class ListRepository {
     const data = await tx[entity].findMany({
       select: {
         id: true,
-        nama: true,
+        name: true,
       },
     });
 
