@@ -139,7 +139,7 @@ export class UserController {
     return new SuccessResponse('user deleted successfully', result);
   }
 
-  @Delete('/batch/delete')
+  @Delete()
   @HttpCode(HttpStatus.CREATED)
   @Authentication(true)
   @Authorization(Role.USER)
