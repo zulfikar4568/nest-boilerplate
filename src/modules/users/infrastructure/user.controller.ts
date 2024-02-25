@@ -9,7 +9,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 import { UserUseCase } from '../domain/usecase/user.usecase';
 import { TCompactUser } from '../domain/entities/user.entity';
@@ -51,8 +51,9 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Authentication(true)
   @Authorization(Role.USER)
-  public async listDropdown() {
-    const result = await this._usecase.listDropdown();
+  @ApiQuery({ name: 'search', type: String, required: false })
+  public async listDropdown(@Context() ctx: IContext) {
+    const result = await this._usecase.listDropdown(ctx);
 
     return new SuccessResponse('user fetched successfully', result);
   }

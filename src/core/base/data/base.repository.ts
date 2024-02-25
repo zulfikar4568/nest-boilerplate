@@ -2,6 +2,7 @@ import { Cache } from 'cache-manager';
 import { TPrismaTx } from '../domain/entities';
 import { ListRepository } from './methods';
 import { BaseCoreRepository } from './base-core.repository';
+import { IContext } from '../frameworks/shared/interceptors/context.interceptor';
 
 export abstract class BaseRepository<
   Entity extends Record<string, any>,
@@ -13,7 +14,10 @@ export abstract class BaseRepository<
     super(entity, cacheManager);
   }
 
-  async listDropdown(tx: TPrismaTx): Promise<Pick<Entity, 'id' | 'name'>[]> {
-    return ListRepository.listDropDown<Entity>(tx, this._entity);
+  async listDropdown(
+    ctx: IContext,
+    tx: TPrismaTx,
+  ): Promise<Pick<Entity, 'id' | 'name'>[]> {
+    return ListRepository.listDropDown<Entity>(ctx, tx, this._entity);
   }
 }

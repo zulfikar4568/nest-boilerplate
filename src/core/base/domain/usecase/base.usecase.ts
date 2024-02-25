@@ -8,6 +8,7 @@ import {
 } from '../../frameworks/shared/exceptions/common.exception';
 import PrismaService from '../../frameworks/data-services/prisma/prisma.service';
 import { BaseCoreUseCase } from './base-core.usecase';
+import { IContext } from '../../frameworks/shared/interceptors/context.interceptor';
 
 export abstract class BaseUseCase<
   Entity extends Record<string, any>,
@@ -28,10 +29,10 @@ export abstract class BaseUseCase<
   }
 
   @Span('usecase list dropdown')
-  async listDropdown(): Promise<Pick<Entity, 'id' | 'name'>[]> {
+  async listDropdown(ctx: IContext): Promise<Pick<Entity, 'id' | 'name'>[]> {
     try {
       return await this.db.$transaction(async (tx) => {
-        return await this.repository.listDropdown(tx);
+        return await this.repository.listDropdown(ctx, tx);
       });
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {

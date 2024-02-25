@@ -12,13 +12,21 @@ import {
 
 export class ListRepository {
   static async listDropDown<Entity extends Record<string, any>>(
+    ctx: IContext,
     tx: TPrismaTx,
     entity: string,
   ): Promise<Pick<Entity, 'id' | 'name'>[]> {
+    const query = ctx.params.query as any;
+
     const data = await tx[entity].findMany({
       select: {
         id: true,
         name: true,
+      },
+      where: {
+        name: {
+          contains: query.search,
+        },
       },
     });
 
