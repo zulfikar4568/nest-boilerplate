@@ -65,7 +65,7 @@ export class SessionUseCase extends BaseUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika logout!`,
+          message: `Error unexpected when try to logout!`,
           params: { exception: error.message },
         });
       }
@@ -73,7 +73,7 @@ export class SessionUseCase extends BaseUseCase<
     }
   }
 
-  @Span('Usecase Refresh Token')
+  @Span('usecase refresh token')
   async refreshToken(ctx: IContext): Promise<Session> {
     const refreshToken = ctx.refreshToken;
     if (refreshToken === undefined) throw new RefreshTokenNotFound();
@@ -127,7 +127,7 @@ export class SessionUseCase extends BaseUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika me-refresh token!`,
+          message: `Error unexpected when try to refresh the token!`,
           params: { exception: error.message },
         });
       }
@@ -135,7 +135,7 @@ export class SessionUseCase extends BaseUseCase<
     }
   }
 
-  @Span('Usecase Session Login')
+  @Span('usecase session login')
   async login(ctx: IContext, body: TLoginSession): Promise<Session> {
     const headers = Object.assign({}, ctx.headers);
 
@@ -183,7 +183,7 @@ export class SessionUseCase extends BaseUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika login!`,
+          message: `Error unexpected when try to login!`,
           params: { exception: error.message },
         });
       }

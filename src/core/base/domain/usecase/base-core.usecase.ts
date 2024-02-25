@@ -39,7 +39,7 @@ export abstract class BaseCoreUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika ketika membuat!`,
+          message: `Error unexpected during create the data!`,
           params: { exception: error.message },
         });
       }
@@ -64,7 +64,7 @@ export abstract class BaseCoreUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika mengambil informasi!`,
+          message: `Error unexpected during retrieve the information!`,
           params: { exception: error.message },
         });
       }
@@ -85,7 +85,7 @@ export abstract class BaseCoreUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika mengubah!`,
+          message: `Error unexpected during change the data!`,
           params: { exception: error.message },
         });
       }
@@ -104,7 +104,7 @@ export abstract class BaseCoreUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika menghapus secara batch!`,
+          message: `Error unexpected during delete the datas!`,
           params: { exception: error.message },
         });
       }
@@ -128,7 +128,7 @@ export abstract class BaseCoreUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika menghapus!`,
+          message: `Error unexpected during delete the data!`,
           params: { exception: error.message },
         });
       }
@@ -151,7 +151,7 @@ export abstract class BaseCoreUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika mengambil list!`,
+          message: `Error unexpected during retrieve a list!`,
           params: { exception: error.message },
         });
       }
@@ -174,7 +174,7 @@ export abstract class BaseCoreUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika mengambil list!`,
+          message: `Error unexpected during retrieve a list!`,
           params: { exception: error.message },
         });
       }

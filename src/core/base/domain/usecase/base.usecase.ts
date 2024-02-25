@@ -38,7 +38,7 @@ export abstract class BaseUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika mengambil informasi sederhana list!`,
+          message: `Error unexpected during retrieve a simple list!`,
           params: { exception: error.message },
         });
       }

@@ -80,7 +80,7 @@ export class UserUseCase extends BaseUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika membuat user!`,
+          message: `Error unexpected during create a user!`,
           params: { exception: error.message },
         });
       }
@@ -105,7 +105,7 @@ export class UserUseCase extends BaseUseCase<
 
         if (body.password !== body.confirmPassword) {
           throw new PasswordIsNotMatch({
-            message: 'Failed update user!',
+            message: 'Failed update the user!',
           });
         }
 
@@ -120,7 +120,7 @@ export class UserUseCase extends BaseUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika mengubah user!`,
+          message: `Error unexpected during change a user!`,
           params: { exception: error.message },
         });
       }
@@ -155,7 +155,7 @@ export class UserUseCase extends BaseUseCase<
         log.error(error.message);
         throw new UnknownException({
           code: EErrorCommonCode.INTERNAL_SERVER_ERROR,
-          message: `Error tidak terduga ketika menghapus user!`,
+          message: `Error unexpected during delete a user!`,
           params: { exception: error.message },
         });
       }
