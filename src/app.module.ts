@@ -11,6 +11,7 @@ import { InstrumentMiddleware } from './core/base/frameworks/shared/middlewares/
 import { logger } from './core/base/frameworks/shared/utils/log.util';
 import { RegistrationModule } from './modules/registration.module';
 import appConfig from './config/app.config';
+import { CoreModule } from './core/modules/core.module';
 
 const OpenTelemetryModuleConfig = OpenTelemetryModule.forRoot({
   metrics: {
@@ -55,6 +56,7 @@ const PinoLoggerModule = LoggerModule.forRoot({
     }),
 
     //bussines
+    CoreModule,
     RegistrationModule,
   ],
 })

@@ -1,5 +1,5 @@
 import { Session as TSession, Prisma } from '@prisma/client';
-import { IListRequestQuery } from '../../../../core/base/domain/entities/query.entity';
+import { IListRequestQuery } from '../../../../base/domain/entities/query.entity';
 import { User } from '@/core/base/domain/entities/auth.entity';
 
 export class Session implements TSession {

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UserRepository } from '../users/data/user.repository';
+import { UserRepository } from '../../../modules/users/data/user.repository';
 import { SessionRepository } from './data/session.repository';
 import { SessionController } from './infrastructure/session.controller';
 import { SessionUseCase } from './domain/usecase/session.usecase';
