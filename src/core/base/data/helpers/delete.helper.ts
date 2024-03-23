@@ -1,12 +1,13 @@
 import { Prisma } from '@prisma/client';
 import { Cache } from 'cache-manager';
 import { TPrismaTx } from '../../domain/entities';
-import { GetRepository } from './get.repository';
+import { ReadHelper } from './read.helper';
 
-export class DeleteRepository {
+export class DeleteHelper {
   static async delete<
     Entity extends Record<string, any>,
     Include extends Record<string, any>,
+    Select extends Record<string, any>,
     Where extends Record<string, any>,
   >(
     id: string,
@@ -14,13 +15,15 @@ export class DeleteRepository {
     entity: string,
     cacheManager: Cache,
     include?: Include,
+    select?: Select,
     where?: Where,
   ): Promise<Entity> {
-    await GetRepository.get(id, tx, entity, cacheManager);
+    await ReadHelper.getById(id, tx, entity, cacheManager);
 
     const data = await tx[entity].delete({
       where: { id, ...where },
       include,
+      select,
     });
 
     if (data) {

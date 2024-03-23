@@ -4,6 +4,7 @@ import 'dotenv/config';
 export default Object.freeze({
   APP_PORT: env.get('APP_PORT').default(3000).asInt(),
   APP_NAME: env.get('APP_NAME').default('sample-app').asString(),
+  PROMETHEUS_PORT: env.get('PROMETHEUS_PORT').default(8081).asInt(),
   NODE_ENV: env.get('NODE_ENV').default('production').asString(),
   COOKIE_SAME_SITE: env.get('COOKIE_SAME_SITE').default('strict').asString(), // lax, strict, none
   COOKIE_SECURE: env.get('COOKIE_SECURE').default('true').asBoolStrict(),

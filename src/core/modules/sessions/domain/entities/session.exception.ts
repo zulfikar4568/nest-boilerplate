@@ -1,4 +1,7 @@
-import { BadRequestException, NotFoundException } from './common.exception';
+import {
+  BadRequestException,
+  NotFoundException,
+} from '../../../../base/frameworks/shared/exceptions/common.exception';
 
 export enum ESessionErrorCode {
   USER_NOT_FOUND = 'U404',

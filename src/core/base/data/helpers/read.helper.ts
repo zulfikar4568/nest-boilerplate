@@ -1,16 +1,80 @@
-import { IContext } from '../../frameworks/shared/interceptors/context.interceptor';
-import { parseQueryCursor } from '../../frameworks/shared/utils/query-cursor.util';
+import { Cache } from 'cache-manager';
+import { NotFoundException } from '../../frameworks/shared/exceptions/common.exception';
 import {
   IListCursorResult,
   IListPaginationResult,
   TPrismaTx,
 } from '../../domain/entities';
+import { IContext } from '../../frameworks/shared/interceptors/context.interceptor';
 import {
   parsePaginationMeta,
   parsePaginationQuery,
 } from '../../frameworks/shared/utils/query-pagination.util';
+import { parseQueryCursor } from '../../frameworks/shared/utils/query-cursor.util';
 
-export class ListRepository {
+export class ReadHelper {
+  static async getMany<Entity, Include, Select, Where>(
+    tx: TPrismaTx,
+    entity: string,
+    include?: Include,
+    select?: Select,
+    where?: Where,
+  ): Promise<Entity[]> {
+    const data = await tx[entity].findMany({
+      where,
+      select,
+      include,
+    });
+
+    return data;
+  }
+  static async getById<Entity, Include, Select>(
+    id: string,
+    tx: TPrismaTx,
+    entity: string,
+    cacheManager: Cache,
+    include?: Include,
+    select?: Select,
+  ): Promise<Entity> {
+    const value = await cacheManager.get(id);
+
+    if (!value) {
+      const data = await tx[entity].findUnique({
+        where: {
+          id,
+        },
+        include,
+        select,
+      });
+
+      if (!data) {
+        throw new NotFoundException({
+          message: `${entity} dengan id ${id} tidak ditemukan!`,
+        });
+      }
+
+      await cacheManager.set(id, data);
+      return data;
+    }
+
+    return value as Entity;
+  }
+  static async get<Entity, Include, Select, Where>(
+    tx: TPrismaTx,
+    entity: string,
+    include?: Include,
+    select?: Select,
+    where?: Where,
+  ): Promise<Entity> {
+    const data = await tx[entity].findUnique({
+      where,
+      include,
+      select,
+    });
+
+    return data;
+  }
+
   static async listDropDown<Entity extends Record<string, any>>(
     ctx: IContext,
     tx: TPrismaTx,
@@ -61,7 +125,7 @@ export class ListRepository {
       skip: offset,
     };
 
-    const queryData = await ListRepository.queryData<Entity>(
+    const queryData = await ReadHelper.queryData<Entity>(
       selectOptions,
       { ...selectOptions, ...{ include }, ...pageOptions },
       tx,
@@ -121,7 +185,7 @@ export class ListRepository {
       };
     }
 
-    const queryData = await ListRepository.queryData<Entity>(
+    const queryData = await ReadHelper.queryData<Entity>(
       selectOptions,
       { ...selectOptions, ...{ include }, ...pageOptions },
       tx,

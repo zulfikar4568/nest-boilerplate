@@ -8,14 +8,17 @@ import {
 } from '../domain/entities/session.entity';
 import { BaseRepository } from '@/core/base/data/base.repository';
 import { TPrismaTx } from '@/core/base/domain/entities';
-import { InvalidRefreshToken } from '@/core/base/frameworks/shared/exceptions/session.exception';
+import { InvalidRefreshToken } from '@/core/modules/sessions/domain/entities/session.exception';
 
 @Injectable()
 export class SessionRepository extends BaseRepository<
   Session,
   Prisma.SessionInclude,
   Prisma.SessionSelect,
-  Prisma.UserWhereInput | Prisma.UserWhereUniqueInput
+  Prisma.SessionWhereInput | Prisma.SessionWhereUniqueInput,
+  Prisma.XOR<Prisma.SessionCreateInput, Prisma.SessionUncheckedCreateInput>,
+  Prisma.SessionCreateManyInput[] | Prisma.SessionCreateManyInput,
+  Prisma.XOR<Prisma.SessionUpdateInput, Prisma.SessionUncheckedUpdateInput>
 > {
   constructor(@Inject(CACHE_MANAGER) cacheManager: Cache) {
     super(Session, cacheManager);

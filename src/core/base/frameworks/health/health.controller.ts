@@ -12,7 +12,7 @@ import {
   PrismaHealthIndicator,
   HealthCheckResult,
 } from '@nestjs/terminus';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import PrismaService from '@/core/base/frameworks/data-services/prisma/prisma.service';
 
 @ApiTags('Health')
@@ -26,6 +26,9 @@ export default class HealthController {
 
   @Version(VERSION_NEUTRAL)
   @Get('health')
+  @ApiOperation({
+    summary: 'This method is to check health of the application',
+  })
   @HealthCheck()
   @HttpCode(HttpStatus.OK)
   check() {
@@ -34,6 +37,9 @@ export default class HealthController {
 
   @Version(VERSION_NEUTRAL)
   @Get()
+  @ApiOperation({
+    summary: 'This method is to check health of the application',
+  })
   @HealthCheck()
   @HttpCode(HttpStatus.OK)
   check2() {

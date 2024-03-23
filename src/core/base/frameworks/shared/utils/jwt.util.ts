@@ -63,7 +63,7 @@ export const generateJwt = async ({
       expiresIn: appConfig.JWT_EXPIRES_IN,
       subject: translator.fromUUID(userId),
       audience: origin,
-      issuer: `by_zulfikar:peradabatik.com`,
+      issuer: `by_zulfikar:sample-app.com`,
     },
   );
 

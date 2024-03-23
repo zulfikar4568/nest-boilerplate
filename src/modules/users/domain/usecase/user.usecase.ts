@@ -16,7 +16,7 @@ import {
   DeleteUnauthorized,
   DuplicateUser,
   PasswordIsNotMatch,
-} from '@/core/base/frameworks/shared/exceptions/user.exception';
+} from '@/modules/users/domain/entities/user.exception';
 import { generatePassword } from '@/core/base/frameworks/shared/utils/password.util';
 import log from '@/core/base/frameworks/shared/utils/log.util';
 import {
@@ -30,7 +30,10 @@ export class UserUseCase extends BaseUseCase<
   User,
   Prisma.UserInclude,
   Prisma.UserSelect,
-  Prisma.UserWhereInput | Prisma.UserWhereUniqueInput
+  Prisma.UserWhereInput | Prisma.UserWhereUniqueInput,
+  Prisma.XOR<Prisma.UserCreateInput, Prisma.UserUncheckedCreateInput>,
+  Prisma.UserCreateManyInput[] | Prisma.UserCreateManyInput,
+  Prisma.XOR<Prisma.UserUpdateInput, Prisma.UserUncheckedUpdateInput>
 > {
   constructor(
     protected repository: UserRepository,
@@ -101,7 +104,7 @@ export class UserUseCase extends BaseUseCase<
   ): Promise<User> {
     try {
       return await this.db.$transaction(async (tx) => {
-        await this.repository.get(params.id, tx);
+        await this.repository.getById(params.id, tx);
 
         if (body.password !== body.confirmPassword) {
           throw new PasswordIsNotMatch({
@@ -147,7 +150,7 @@ export class UserUseCase extends BaseUseCase<
 
     try {
       return await this.db.$transaction(async (tx) => {
-        await this.repository.get(params.id, tx);
+        await this.repository.getById(params.id, tx);
         return await this.repository.delete(params.id, tx);
       });
     } catch (error: any) {

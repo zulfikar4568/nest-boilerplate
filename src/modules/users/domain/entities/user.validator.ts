@@ -161,6 +161,10 @@ export class CreateUserValidator
   roles: Role[];
 }
 
+export class UpsertUserValidator
+  extends CreateUserValidator
+  implements TUpdateUserRequestBody {}
+
 export class UpdateUserParamsValidator
   extends IDValidator
   implements TUpdateUserByIdRequestParams {}

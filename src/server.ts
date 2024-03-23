@@ -29,6 +29,9 @@ const printConfig = () => {
     }, HTTP Only: ${appConfig.COOKIE_HTTP_ONLY ? 'yes' : 'no'}`,
   );
   log.info(`Environment App: ${appConfig.NODE_ENV}`);
+  log.info(
+    `Application Export Metrics to Prometheus in PORT: ${appConfig.PROMETHEUS_PORT}`,
+  );
   log.info(`Application Name: ${appConfig.APP_NAME}`);
   log.info(`JWT Expiration: ${appConfig.JWT_EXPIRES_IN}`);
   log.info(`Refresh JWT Expiration: ${appConfig.JWT_REFRESH_EXPIRES_IN}`);
@@ -81,6 +84,17 @@ const httpServer = new Promise(async (resolve, reject) => {
         .setTitle('Backend API')
         .setDescription('Backend API')
         .setVersion('1.0.0')
+        .addBearerAuth(
+          {
+            description: `[just text field] Please enter token in following format: Bearer <JWT>`,
+            name: 'Authorization',
+            bearerFormat: 'Bearer', // I`ve tested not to use this field, but the result was the same
+            scheme: 'Bearer',
+            type: 'http', // I`ve attempted type: 'apiKey' too
+            in: 'Header',
+          },
+          'access-token', // This name here is important for matching up with @ApiBearerAuth() in your controller!
+        )
         .build();
 
       const document = SwaggerModule.createDocument(app, config);

@@ -6,7 +6,12 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { OtelInstanceCounter } from 'nestjs-otel';
 import {
   CreateSessionSerializer,
@@ -30,6 +35,9 @@ export class SessionController {
   constructor(private readonly _sessionUseCase: SessionUseCase) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'This method is used for login or create a new session',
+  })
   @HttpCode(HttpStatus.CREATED)
   @Serializer(CreateSessionSerializer)
   @CookieAuthentication('login')
@@ -47,6 +55,9 @@ export class SessionController {
 
   @ApiBearerAuth('access-token')
   @Get('ping')
+  @ApiOperation({
+    summary: 'This is used for check whether connection is ok',
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'To Check status of authentication',
@@ -59,6 +70,9 @@ export class SessionController {
 
   @ApiBearerAuth('access-token')
   @Get('me')
+  @ApiOperation({
+    summary: 'This method is used to get information behind the scene of token',
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'To Get Information behind the scene of token',
@@ -71,6 +85,9 @@ export class SessionController {
 
   @ApiBearerAuth('access-token')
   @Post('refresh')
+  @ApiOperation({
+    summary: 'This method is used to refresh token if access token is expired',
+  })
   @HttpCode(HttpStatus.ACCEPTED)
   @Authentication(true)
   @Serializer(RefreshSessionSerializer)
@@ -83,6 +100,9 @@ export class SessionController {
 
   @ApiBearerAuth('access-token')
   @Post('logout')
+  @ApiOperation({
+    summary: 'This method is used for logout',
+  })
   @HttpCode(HttpStatus.OK)
   @Authentication(true)
   @CookieAuthentication('logout')

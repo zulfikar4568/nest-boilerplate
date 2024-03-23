@@ -35,3 +35,4 @@ export class CreateUserSerializer implements User {
 export class UpdateUserSerializer extends CreateUserSerializer {}
 export class DeleteUserSerializer extends CreateUserSerializer {}
 export class GetUserSerializer extends CreateUserSerializer {}
+export class UpsertUserSerializer extends CreateUserSerializer {}
